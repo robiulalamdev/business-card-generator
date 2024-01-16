@@ -10,7 +10,27 @@ module.exports = withMT({
     "./node_modules/@material-tailwind/react/theme/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#4A51D3",
+      },
+      container: {
+        center: true,
+        padding: "10px",
+        screens: {
+          "2xl": "1480px",
+        },
+      },
+      fontFamily: {
+        inter: ["Inter", "serif"],
+        inter: ["Inter", "sans-serif"],
+      },
+    },
+  },
+  variants: {
+    extend: {
+      display: ["group-focus", "group-hover"],
+    },
   },
   plugins: [],
 });
