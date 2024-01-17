@@ -1,21 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 import { iCall, iEmail, iLocation, iUser } from "@/lib/icons/templateIcons";
 import React from "react";
+import { useSelector } from "react-redux";
 const img =
   "https://www.freeiconspng.com/thumbs/logo-design/3d-link-logo-brand-design-png-image-12.png";
 
-const TemplateCard1 = ({ cardData }) => {
-  // console.log(cardData);
+const TemplateCard1 = () => {
+  const { selectedTmp, generateStep, templateData } = useSelector(
+    (state) => state.global
+  );
+  // console.log(templateData);
   return (
-    <div className="grid grid-cols-2 max-w-[386px] w-full min-h-[220px]">
+    <div className="grid grid-cols-2 min-w-[386px] min-h-[220px]">
       <div className="w-full h-full bg-blue-gray-50/35 flex items-center gap-1 px-1 border-t-2 border-l-2 border-b-2 border-green-600">
         <img
           className="size-[40px]"
-          src={URL.createObjectURL(cardData?.logo) || img}
+          src={URL.createObjectURL(templateData?.logo) || img}
           alt=""
         />
         <h1 className="text-sm font-semibold text-black text-nowrap uppercase">
-          {cardData?.company_name || "Company NAME"}
+          {templateData?.company_name || "Company NAME"}
         </h1>
       </div>
       <div className="bg-[#020A1F] flex items-center">
@@ -26,10 +30,10 @@ const TemplateCard1 = ({ cardData }) => {
             </div>
             <div className="border-b-[3px] border-green-600 pb-1">
               <h1 className="text-white uppercase font-normal">
-                {cardData?.author || "Kurt Willer"}
+                {templateData?.author || "Kurt Willer"}
               </h1>
               <p className="text-xs text-gray-300 font-light">
-                {cardData?.designation || "Executive CEO"}
+                {templateData?.designation || "Executive CEO"}
               </p>
             </div>
           </div>
@@ -39,10 +43,10 @@ const TemplateCard1 = ({ cardData }) => {
             </div>
             <div className="border-b-[3px] border-green-600 pb-1">
               <h1 className="text-white text-[12px] font-normal">
-                {cardData?.phone_primary || "+ 000 111 222 555 555"}
+                {templateData?.phone_primary || "+ 000 111 222 555 555"}
               </h1>
               <p className="text-white text-[12px] font-normal">
-                {cardData?.phone_secondary || "+ 777 333 222 555 555"}
+                {templateData?.phone_secondary || "+ 777 333 222 555 555"}
               </p>
             </div>
           </div>
@@ -52,10 +56,10 @@ const TemplateCard1 = ({ cardData }) => {
             </div>
             <div className="border-b-[3px] border-green-600 pb-1">
               <h1 className="text-white text-[12px] font-normal">
-                {cardData?.email_primary || "companyname@mail.com"}
+                {templateData?.email_primary || "companyname@mail.com"}
               </h1>
               <p className="text-white text-[12px] font-normal">
-                {cardData?.email_secondary || "companyname@mail.com"}
+                {templateData?.email_secondary || "companyname@mail.com"}
               </p>
             </div>
           </div>
@@ -65,7 +69,7 @@ const TemplateCard1 = ({ cardData }) => {
             </div>
             <div className="border-b-[3px] border-green-600 pb-1">
               <p className="text-white text-[12px] font-normal">
-                {cardData?.address ||
+                {templateData?.address ||
                   "123 Main Street, City," + <br /> + "State"}
               </p>
             </div>

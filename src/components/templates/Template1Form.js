@@ -6,8 +6,14 @@ import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { SpinnerCircularFixed } from "spinners-react";
 import TemplateCard1 from "./template1/TemplateCard1";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setGenerateStep,
+  setTemplateData,
+} from "@/redux/features/globals/globalsSlice";
 
 const Template1Form = () => {
+  const { selectedTmp, generateStep } = useSelector((state) => state.global);
   const { handlePhoneNumberInput } = useInputPattern();
   const {
     handleSubmit,
@@ -19,8 +25,9 @@ const Template1Form = () => {
     formState: { errors },
   } = useForm();
 
+  const dispatch = useDispatch();
+
   // stats
-  const [cardData, setCardData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [logo, setLogo] = useState(null);
 
@@ -33,10 +40,11 @@ const Template1Form = () => {
       return;
     }
     setIsLoading(true);
-    setCardData({ ...data, logo: logo });
     setTimeout(() => {
+      dispatch(setTemplateData({ ...data, logo: logo }));
+      dispatch(setGenerateStep(2));
       setIsLoading(false);
-    }, 2000);
+    }, 1000);
   };
   return (
     <>
@@ -47,14 +55,14 @@ const Template1Form = () => {
         >
           <div className="col-span-2">
             <label
-              className="text-xs sm:text-sm md:text-base font-semibold uppercase leading-[26px] block"
+              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
               htmlFor=""
             >
               Logo
             </label>
             <Button
               onClick={() => logoRef.current.click()}
-              className={`w-full h-[250px] rounded shadow-none border-2 hover:shadow-none bg-primary_gw flex flex-col justify-center gap-4 items-center`}
+              className={`w-full h-[160px] rounded shadow-none border-2 hover:shadow-none bg-primary_gw flex flex-col justify-center gap-4 items-center`}
             >
               {logo ? (
                 <img
@@ -64,7 +72,7 @@ const Template1Form = () => {
                 />
               ) : (
                 <>
-                  <div className="max-w-[100px] text-primary">{iUpload}</div>
+                  <div className="max-w-[60px] text-primary">{iUpload}</div>
                   <h1 className="text-gray-500 text-sm font-normal !normal-case text-current">
                     Upload Logo Image <span>(.png, .jpg, jpeg)</span>
                   </h1>
@@ -221,14 +229,14 @@ const Template1Form = () => {
           </Button>
         </form>
       </div>
-      <Dialog
+      {/* <Dialog
         size="xs"
         open={!isLoading && cardData}
         handler={() => setCardData(null)}
         className="bg-white flex justify-center items-center py-5"
       >
         <TemplateCard1 cardData={cardData} />
-      </Dialog>
+      </Dialog> */}
     </>
   );
 };
