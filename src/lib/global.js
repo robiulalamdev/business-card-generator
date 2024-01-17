@@ -1,2 +1,4 @@
-export const BASE_URL = "";
+// export const BASE_URL = "http://localhost:8000/api/v1";
+export const BASE_URL = "https://bcg-server.onrender.com/api/v1";
 export const SECRETE_TOKEN = "";
+export const CLIENT_URL = "https://bc-generator.vercel.app";

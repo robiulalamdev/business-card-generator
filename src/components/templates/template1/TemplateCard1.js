@@ -13,11 +13,7 @@ const TemplateCard1 = () => {
   return (
     <div className="grid grid-cols-2 min-w-[386px] min-h-[220px]">
       <div className="w-full h-full bg-blue-gray-50/35 flex items-center gap-1 px-1 border-t-2 border-l-2 border-b-2 border-green-600">
-        <img
-          className="size-[40px]"
-          src={URL.createObjectURL(templateData?.logo) || img}
-          alt=""
-        />
+        <img className="size-[40px]" src={templateData?.logo || img} alt="" />
         <h1 className="text-sm font-semibold text-black text-nowrap uppercase">
           {templateData?.company_name || "Company NAME"}
         </h1>

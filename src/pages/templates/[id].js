@@ -2,19 +2,33 @@
 
 import Template1Form from "@/components/templates/Template1Form";
 import { templates } from "@/lib/datas/templates";
-import { setSelectedTmp } from "@/redux/features/globals/globalsSlice";
-import { Button } from "@material-tailwind/react";
+import { CLIENT_URL } from "@/lib/global";
+import {
+  setGenerateStep,
+  setSelectedTmp,
+  setTemplateData,
+} from "@/redux/features/globals/globalsSlice";
+import { useCreateTemplateMutation } from "@/redux/features/template/templateApi";
+import { Button, IconButton } from "@material-tailwind/react";
 import html2canvas from "html2canvas";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ScaleLoader } from "react-spinners";
+import { toast } from "sonner";
+import { SpinnerCircularFixed } from "spinners-react";
 
 const TemplateFormPage = () => {
   const { query } = useRouter();
-  const { selectedTmp, generateStep } = useSelector((state) => state.global);
+  const [createTemplate, { isLoading: saveLoading }] =
+    useCreateTemplateMutation();
+  const { selectedTmp, generateStep, templateData } = useSelector(
+    (state) => state.global
+  );
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState("");
   const dispatch = useDispatch();
+
   const handleGetData = () => {
     const template = templates.find((tmp) => tmp._id === parseInt(query.id));
     dispatch(setSelectedTmp(template));
@@ -39,8 +53,44 @@ const TemplateFormPage = () => {
     document.body.removeChild(link);
   };
 
-  // console.log(selectedTmp);
-  // toast('My first toast')
+  const handleTmpUrl = async () => {
+    const element = document.getElementById("print");
+
+    if (element) {
+      const canvas = await html2canvas(element);
+      const imageUrl = canvas.toDataURL("image/jpg");
+
+      return imageUrl;
+    }
+
+    return null;
+  };
+
+  const handleSave = async () => {
+    const url = await handleTmpUrl();
+    const options = {
+      data: { template_img: url, template: templateData },
+    };
+    const result = await createTemplate(options);
+    if (result?.data?.success) {
+      toast.success("Business Card Save Success");
+      setIsSaved(`${CLIENT_URL}/temps/${result?.data?.data?.template_link}`);
+    } else {
+      toast.error("Business Card Save Success");
+    }
+  };
+
+  const copyToClipboard = (text) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand("copy");
+      toast.success("Business Card URL Copied!");
+    } catch (err) {}
+    document.body.removeChild(textArea);
+  };
   return (
     <div className="container h-screen ">
       {isLoading ? (
@@ -60,6 +110,19 @@ const TemplateFormPage = () => {
               <div className="flex justify-center">
                 <div id="print">{selectedTmp?.template}</div>
               </div>
+              {isSaved && (
+                <div className="flex justify-center items-center gap-4 mt-4">
+                  <div className="text-xs min-h-[40px] w-fit max-w-[800px] bg-black text-gray-300 px-2 flex items-center rounded">
+                    {isSaved}
+                  </div>
+                  <Button
+                    onClick={() => copyToClipboard(isSaved)}
+                    className="bg-primary h-10 w-14 flex justify-center items-center shadow-none hover:shadow-none text-white text-xs rounded"
+                  >
+                    <small>Copy</small>
+                  </Button>
+                </div>
+              )}
               <div className="flex justify-center items-center gap-4 mt-8">
                 <Button
                   onClick={() => handleDownloadImage()}
@@ -69,12 +132,24 @@ const TemplateFormPage = () => {
                 >
                   Download
                 </Button>
-                <Button
-                  className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-yellow-700 to-pink-500
-          hover:bg-gradient-to-r hover:from-pink-500 hover:to-yellow-700 transition-all ease-in duration-500"
-                >
-                  Generate Link
-                </Button>
+                {!isSaved && (
+                  <Button
+                    onClick={() => handleSave()}
+                    className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-yellow-700 to-pink-500
+          hover:bg-gradient-to-r hover:from-pink-500 hover:to-yellow-700 transition-all ease-in duration-500 flex justify-center items-center gap-2"
+                  >
+                    {saveLoading && (
+                      <SpinnerCircularFixed
+                        size={30}
+                        thickness={150}
+                        speed={450}
+                        color="white"
+                        secondaryColor="gray"
+                      />
+                    )}
+                    Generate Link
+                  </Button>
+                )}
               </div>
             </>
           )}

@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }) {
   return (
     <ThemeProvider>
       <Provider store={store}>
-        <Toaster />
+        <Toaster position="top-right" />
         <MainLayout>
           <Component {...pageProps} />
         </MainLayout>

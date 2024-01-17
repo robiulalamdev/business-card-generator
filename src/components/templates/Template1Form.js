@@ -34,14 +34,35 @@ const Template1Form = () => {
   // refs
   const logoRef = useRef();
 
-  const handleGenerate = (data) => {
+  const convertImageToBase64 = async (imageFile) => {
+    return new Promise((resolve, reject) => {
+      if (!imageFile || !(imageFile instanceof File)) {
+        reject("Invalid image file");
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        resolve(e.target.result);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+
+      reader.readAsDataURL(imageFile);
+    });
+  };
+
+  const handleGenerate = async (data) => {
     if (!logo) {
       logoRef.current.focus();
       return;
     }
     setIsLoading(true);
+    const url = await convertImageToBase64(logo);
     setTimeout(() => {
-      dispatch(setTemplateData({ ...data, logo: logo }));
+      dispatch(setTemplateData({ ...data, logo: url }));
       dispatch(setGenerateStep(2));
       setIsLoading(false);
     }, 1000);
