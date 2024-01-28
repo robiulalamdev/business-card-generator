@@ -1,18 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
-import Template1Form from "@/components/templates/Template1Form";
 import { templates } from "@/lib/datas/templates";
 import { CLIENT_URL } from "@/lib/global";
+import { setSelectedTmp } from "@/redux/features/globals/globalsSlice";
 import {
-  setGenerateStep,
-  setSelectedTmp,
-  setTemplateData,
-} from "@/redux/features/globals/globalsSlice";
-import { useCreateTemplateMutation } from "@/redux/features/template/templateApi";
-import { Button, IconButton } from "@material-tailwind/react";
+  useCreateTemplateMutation,
+  useSendSourceCodeMutation,
+} from "@/redux/features/template/templateApi";
+import {
+  Button,
+  Popover,
+  PopoverContent,
+  PopoverHandler,
+} from "@material-tailwind/react";
 import html2canvas from "html2canvas";
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { ScaleLoader } from "react-spinners";
 import { toast } from "sonner";
@@ -20,9 +23,10 @@ import { SpinnerCircularFixed } from "spinners-react";
 
 const TemplateFormPage = () => {
   const { query } = useRouter();
+  const [sendSourceCode] = useSendSourceCodeMutation();
   const [createTemplate, { isLoading: saveLoading }] =
     useCreateTemplateMutation();
-  const { selectedTmp, generateStep, templateData } = useSelector(
+  const { selectedTmp, generateStep, templateData, html } = useSelector(
     (state) => state.global
   );
   const [isLoading, setIsLoading] = useState(true);
@@ -59,10 +63,8 @@ const TemplateFormPage = () => {
     if (element) {
       const canvas = await html2canvas(element);
       const imageUrl = canvas.toDataURL("image/jpg");
-
       return imageUrl;
     }
-
     return null;
   };
 
@@ -91,6 +93,21 @@ const TemplateFormPage = () => {
     } catch (err) {}
     document.body.removeChild(textArea);
   };
+
+  const { handleSubmit, register, reset } = useForm();
+  const handleSourceCode = async (data) => {
+    const options = {
+      data: { email: data?.email, html: html },
+    };
+    const result = await sendSourceCode(options);
+    if (result?.data?.success) {
+      reset();
+      toast.success("Source Code send to email");
+    } else {
+      toast.error("Something went wrong!");
+    }
+  };
+
   return (
     <div className="container h-screen ">
       {isLoading ? (
@@ -150,6 +167,39 @@ const TemplateFormPage = () => {
                     Generate Link
                   </Button>
                 )}
+
+                <div>
+                  <Popover>
+                    <PopoverHandler>
+                      <Button
+                        size="sm"
+                        className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
+          hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500"
+                      >
+                        Get Source Code
+                      </Button>
+                    </PopoverHandler>
+                    <PopoverContent>
+                      <form onSubmit={handleSubmit(handleSourceCode)}>
+                        <input
+                          {...register("email", { required: true })}
+                          type="email"
+                          required
+                          placeholder="Enter Email"
+                          className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+                        />
+                        <Button
+                          size="sm"
+                          type="submit"
+                          className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
+          hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 mt-2"
+                        >
+                          Submit
+                        </Button>
+                      </form>
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
             </>
           )}

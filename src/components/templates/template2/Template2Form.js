@@ -5,23 +5,17 @@ import { Button, Dialog } from "@material-tailwind/react";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { SpinnerCircularFixed } from "spinners-react";
-import TemplateCard1 from "./template1/TemplateCard1";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setGenerateStep,
+  setHtml,
   setTemplateData,
 } from "@/redux/features/globals/globalsSlice";
 
-const Template1Form = () => {
-  const { selectedTmp, generateStep } = useSelector((state) => state.global);
-  const { handlePhoneNumberInput } = useInputPattern();
+const Template2Form = () => {
   const {
     handleSubmit,
     register,
-    setValue,
-    setError,
-    watch,
-    control,
     formState: { errors },
   } = useForm();
 
@@ -63,6 +57,33 @@ const Template1Form = () => {
     const url = await convertImageToBase64(logo);
     setTimeout(() => {
       dispatch(setTemplateData({ ...data, logo: url }));
+      const html = `<div
+  style="display: flex;align-items: start; width: 300px; height: fit-content; padding: 10px; background: ghostwhite;">
+  <img style="width: 80px; height: 80px; border-radius: 50%;"
+      src="${url}"
+      alt="">
+  <div style="border-left: 1px solid gray; padding: 0px 5px;">
+      <h1 style="font-size: 16px;margin: 0px; font-family: Arial, Helvetica, sans-serif;">${data?.name}</h1>
+      <p style="font-size: 12px;margin: 0px; font-family: Arial, Helvetica, sans-serif;">
+      ${data?.designation}
+      </p>
+      <p style="padding-top: 5px; color: black;"><a href="#"
+              style="font-size: 12px;text-decoration: none; font-family: Arial, Helvetica, sans-serif;color: black;">
+              ${data?.address}
+          </a></p>
+      <div style="display: flex; align-items: center; gap: 10px;">
+          <img style="width: 20px; height: 20px; border-radius: 50%;"
+              src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="">
+          <img style="width: 20px; height: 20px; border-radius: 50%;"
+              src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="">
+          <img style="width: 20px; height: 20px; border-radius: 50%;"
+              src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="">
+          <img style="width: 20px; height: 20px; border-radius: 50%;"
+              src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="">
+      </div>
+  </div>
+</div>`;
+      dispatch(setHtml(html));
       dispatch(setGenerateStep(2));
       setIsLoading(false);
     }, 1000);
@@ -117,29 +138,14 @@ const Template1Form = () => {
               Name
             </label>
             <input
-              {...register("company_name", { required: true })}
+              {...register("name", { required: true })}
               type="text"
               required
-              placeholder="Enter Company Name"
+              placeholder="Enter Name"
               className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
             />
           </div>
 
-          <div className="col-span-1">
-            <label
-              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-              htmlFor=""
-            >
-              Author
-            </label>
-            <input
-              {...register("author", { required: true })}
-              type="text"
-              required
-              placeholder="Enter Author Name"
-              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-            />
-          </div>
           <div className="col-span-1">
             <label
               className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
@@ -155,68 +161,7 @@ const Template1Form = () => {
               className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
             />
           </div>
-          <div className="col-span-1">
-            <label
-              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-              htmlFor=""
-            >
-              Phone 1
-            </label>
-            <input
-              {...register("phone_primary", { required: true })}
-              type="text"
-              onInput={handlePhoneNumberInput}
-              required
-              placeholder="Enter Phone Number"
-              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-            />
-          </div>
-          <div className="col-span-1">
-            <label
-              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-              htmlFor=""
-            >
-              Phone 2
-            </label>
-            <input
-              {...register("phone_secondary", { required: true })}
-              type="text"
-              onInput={handlePhoneNumberInput}
-              required
-              placeholder="Enter Phone Number"
-              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-            />
-          </div>
-          <div className="col-span-1">
-            <label
-              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-              htmlFor=""
-            >
-              Email 1
-            </label>
-            <input
-              {...register("email_primary", { required: true })}
-              type="email"
-              required
-              placeholder="Enter Email"
-              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-            />
-          </div>
-          <div className="col-span-1">
-            <label
-              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-              htmlFor=""
-            >
-              Email 2
-            </label>
-            <input
-              {...register("email_secondary", { required: true })}
-              type="email"
-              required
-              placeholder="Enter Email"
-              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-            />
-          </div>
+
           <div className="col-span-2">
             <label
               className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
@@ -262,4 +207,4 @@ const Template1Form = () => {
   );
 };
 
-export default Template1Form;
+export default Template2Form;

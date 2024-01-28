@@ -6,10 +6,9 @@ const img =
   "https://www.freeiconspng.com/thumbs/logo-design/3d-link-logo-brand-design-png-image-12.png";
 
 const TemplateCard1 = () => {
-  const { selectedTmp, generateStep, templateData } = useSelector(
-    (state) => state.global
-  );
+  const { templateData } = useSelector((state) => state.global);
   // console.log(templateData);
+
   return (
     <div className="grid grid-cols-2 min-w-[386px] min-h-[220px]">
       <div className="w-full h-full bg-blue-gray-50/35 flex items-center gap-1 px-1 border-t-2 border-l-2 border-b-2 border-green-600">

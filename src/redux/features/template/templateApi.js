@@ -11,6 +11,15 @@ const templateApi = api.injectEndpoints({
       invalidatesTags: ["templates"],
     }),
 
+    sendSourceCode: builder.mutation({
+      query: ({ data }) => ({
+        url: `/templates/send-source-code`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["templates"],
+    }),
+
     // get categories by store used
     getTemplate: builder.query({
       query: (link) => `/templates/${link}/`,
@@ -19,4 +28,8 @@ const templateApi = api.injectEndpoints({
   }),
 });
 
-export const { useCreateTemplateMutation, useGetTemplateQuery } = templateApi;
+export const {
+  useCreateTemplateMutation,
+  useGetTemplateQuery,
+  useSendSourceCodeMutation,
+} = templateApi;

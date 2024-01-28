@@ -1,6 +1,10 @@
-import TemplateCard1 from "@/components/templates/template1/TemplateCard1";
+import TemplateCard1 from "@/components/templates/template1/Template1Card";
+import Template1Form from "@/components/templates/template1/Template1Form";
+import Template2Form from "@/components/templates/template2/Template2Form";
+import Template2Card from "@/components/templates/template2/Template2Card";
+// images
 import img from "../../assets/images/card.png";
-import Template1Form from "@/components/templates/Template1Form";
+import t2 from "../../assets/images/templates/t2.png";
 
 export const templates = [
   {
@@ -13,9 +17,9 @@ export const templates = [
   {
     _id: 2,
     name: "template-2",
-    template: <TemplateCard1 />,
-    tmp_form: <Template1Form />,
-    img: img,
+    template: <Template2Card />,
+    tmp_form: <Template2Form />,
+    img: t2,
   },
   {
     _id: 3,
