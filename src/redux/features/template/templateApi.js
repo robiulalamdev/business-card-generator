@@ -11,6 +11,14 @@ const templateApi = api.injectEndpoints({
       invalidatesTags: ["templates"],
     }),
 
+    isMatchedTicket: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/tickets/isMatched/${id}`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+
     sendSourceCode: builder.mutation({
       query: ({ data }) => ({
         url: `/templates/send-source-code`,
@@ -32,4 +40,7 @@ export const {
   useCreateTemplateMutation,
   useGetTemplateQuery,
   useSendSourceCodeMutation,
+
+  // tickets
+  useIsMatchedTicketMutation,
 } = templateApi;
