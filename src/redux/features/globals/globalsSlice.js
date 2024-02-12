@@ -5,6 +5,7 @@ const initialState = {
   templateData: null,
   html: null,
   generateStep: 1,
+  tempResult: null,
 };
 
 const globalsSlice = createSlice({
@@ -23,10 +24,18 @@ const globalsSlice = createSlice({
     setGenerateStep: (state, action) => {
       state.generateStep = action.payload;
     },
+    setTempResult: (state, action) => {
+      state.tempResult = action.payload;
+    },
   },
 });
 
-export const { setSelectedTmp, setTemplateData, setHtml, setGenerateStep } =
-  globalsSlice.actions;
+export const {
+  setSelectedTmp,
+  setTemplateData,
+  setHtml,
+  setGenerateStep,
+  setTempResult,
+} = globalsSlice.actions;
 
 export default globalsSlice.reducer;

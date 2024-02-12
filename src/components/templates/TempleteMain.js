@@ -6,42 +6,31 @@ import {
   useCreateTemplateMutation,
   useSendSourceCodeMutation,
 } from "@/redux/features/template/templateApi";
-import {
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverHandler,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import html2canvas from "html2canvas";
-import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import QRCode from "react-qr-code";
 import { useDispatch, useSelector } from "react-redux";
 import { ScaleLoader } from "react-spinners";
 import { toast } from "sonner";
-import { SpinnerCircularFixed } from "spinners-react";
 
-const TemplateMain = () => {
-  const { query } = useRouter();
+const TemplateMain = ({ ticket, templateNo }) => {
   const [sendSourceCode] = useSendSourceCodeMutation();
-  const [createTemplate, { isLoading: saveLoading }] =
-    useCreateTemplateMutation();
-  const { selectedTmp, generateStep, templateData, html } = useSelector(
-    (state) => state.global
-  );
+
+  const { selectedTmp, generateStep, templateData, html, tempResult } =
+    useSelector((state) => state.global);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaved, setIsSaved] = useState("");
   const dispatch = useDispatch();
 
   const handleGetData = () => {
-    const template = templates.find((tmp) => tmp._id === parseInt(query.id));
+    const template = templates.find((tmp) => tmp._id === templateNo);
     dispatch(setSelectedTmp(template));
     setIsLoading(false);
   };
   useMemo(() => {
     setIsLoading(true);
     handleGetData();
-  }, [query?.id]);
+  }, [templateNo]);
 
   const handleDownloadImage = async () => {
     const element = document.getElementById("print"),
@@ -57,31 +46,6 @@ const TemplateMain = () => {
     document.body.removeChild(link);
   };
 
-  const handleTmpUrl = async () => {
-    const element = document.getElementById("print");
-
-    if (element) {
-      const canvas = await html2canvas(element);
-      const imageUrl = canvas.toDataURL("image/jpg");
-      return imageUrl;
-    }
-    return null;
-  };
-
-  const handleSave = async () => {
-    const url = await handleTmpUrl();
-    const options = {
-      data: { template_img: url, template: templateData },
-    };
-    const result = await createTemplate(options);
-    if (result?.data?.success) {
-      toast.success("Business Card Save Success");
-      setIsSaved(`${CLIENT_URL}/temps/${result?.data?.data?.template_link}`);
-    } else {
-      toast.error("Business Card Save Success");
-    }
-  };
-
   const copyToClipboard = (text) => {
     const textArea = document.createElement("textarea");
     textArea.value = text;
@@ -89,19 +53,17 @@ const TemplateMain = () => {
     textArea.select();
     try {
       document.execCommand("copy");
-      toast.success("Business Card URL Copied!");
+      toast.success("Template URL Copied!");
     } catch (err) {}
     document.body.removeChild(textArea);
   };
 
-  const { handleSubmit, register, reset } = useForm();
-  const handleSourceCode = async (data) => {
+  const handleSourceCode = async () => {
     const options = {
-      data: { email: data?.email, html: html },
+      data: { email: ticket?.email, html: html },
     };
     const result = await sendSourceCode(options);
     if (result?.data?.success) {
-      reset();
       toast.success("Source Code send to email");
     } else {
       toast.error("Something went wrong!");
@@ -127,13 +89,23 @@ const TemplateMain = () => {
               <div className="flex justify-center">
                 <div id="print">{selectedTmp?.template}</div>
               </div>
-              {isSaved && (
+              <div className="flex justify-center items-center w-full mt-5">
+                <QRCode
+                  value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
+                  style={{ height: "150px", width: "150px" }}
+                />
+              </div>
+              {tempResult?.template_link && (
                 <div className="flex justify-center items-center gap-4 mt-4">
                   <div className="text-xs min-h-[40px] w-fit max-w-[800px] bg-black text-gray-300 px-2 flex items-center rounded">
-                    {isSaved}
+                    {`${CLIENT_URL}/temps/${tempResult?.template_link}`}
                   </div>
                   <Button
-                    onClick={() => copyToClipboard(isSaved)}
+                    onClick={() =>
+                      copyToClipboard(
+                        `${CLIENT_URL}/temps/${tempResult?.template_link}`
+                      )
+                    }
                     className="bg-primary h-10 w-14 flex justify-center items-center shadow-none hover:shadow-none text-white text-xs rounded"
                   >
                     <small>Copy</small>
@@ -149,57 +121,23 @@ const TemplateMain = () => {
                 >
                   Download
                 </Button>
-                {!isSaved && (
-                  <Button
-                    onClick={() => handleSave()}
-                    className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-yellow-700 to-pink-500
-          hover:bg-gradient-to-r hover:from-pink-500 hover:to-yellow-700 transition-all ease-in duration-500 flex justify-center items-center gap-2"
-                  >
-                    {saveLoading && (
-                      <SpinnerCircularFixed
-                        size={30}
-                        thickness={150}
-                        speed={450}
-                        color="white"
-                        secondaryColor="gray"
-                      />
-                    )}
-                    Generate Link
-                  </Button>
-                )}
-
-                <div>
-                  <Popover>
-                    <PopoverHandler>
-                      <Button
-                        size="sm"
-                        className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
+                <Button
+                  onClick={() => handleDownload(tempResult?.banner)}
+                  size="sm"
+                  className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
           hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500"
-                      >
-                        Get Source Code
-                      </Button>
-                    </PopoverHandler>
-                    <PopoverContent>
-                      <form onSubmit={handleSubmit(handleSourceCode)}>
-                        <input
-                          {...register("email", { required: true })}
-                          type="email"
-                          required
-                          placeholder="Enter Email"
-                          className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-                        />
-                        <Button
-                          size="sm"
-                          type="submit"
-                          className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
-          hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 mt-2"
-                        >
-                          Submit
-                        </Button>
-                      </form>
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                >
+                  Download Banner
+                </Button>
+
+                <Button
+                  onClick={() => handleSourceCode()}
+                  size="sm"
+                  className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
+          hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500"
+                >
+                  Get Source Code
+                </Button>
               </div>
             </>
           )}

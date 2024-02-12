@@ -24,6 +24,7 @@ const TemplateById = () => {
   const handleSave = async (data) => {
     const options = {
       data: data,
+      id: id,
     };
     const result = await isMatchedTicket(options);
     if (result?.data?.success) {
@@ -39,16 +40,13 @@ const TemplateById = () => {
     }
   };
 
-  const values = watch();
-  useEffect(() => {
-    if (values) {
-      setErrorResult("");
-    }
-  }, [values]);
   return (
     <div>
       {isOpen && isOpen?._id ? (
-        <TemplateMain />
+        <TemplateMain
+          ticket={isOpen}
+          templateNo={parseInt(isOpen?.template_no)}
+        />
       ) : (
         <Dialog size="sm" open={!isOpen && !isOpen?._id} className="py-4">
           <h1 className="text-center py-4 font-bold text-xl text-black">

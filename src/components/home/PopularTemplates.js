@@ -3,9 +3,6 @@ import { templates } from "@/lib/datas/templates";
 import React from "react";
 import TemplateCard from "../templates/TemplateCard";
 
-const img =
-  "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/simple-modern-professional-services-business-design-template-f24509d185d52c27169f686ba2f9f593.jpg?ts=1590692682";
-
 const PopularTemplates = () => {
   return (
     <>

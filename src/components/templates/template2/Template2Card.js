@@ -3,15 +3,13 @@ import { useSelector } from "react-redux";
 
 const Template2Card = () => {
   const { templateData, html } = useSelector((state) => state.global);
-  console.log(html);
+  // console.log(html);
   return (
-    <div>
-      <div
-        dangerouslySetInnerHTML={{
-          __html: html,
-        }}
-      />
-    </div>
+    <div
+      dangerouslySetInnerHTML={{
+        __html: html,
+      }}
+    />
   );
 };
 

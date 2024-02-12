@@ -9,21 +9,32 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setGenerateStep,
   setHtml,
+  setTempResult,
   setTemplateData,
 } from "@/redux/features/globals/globalsSlice";
+import BannerInput from "@/components/commons/BannerInput";
+import { useCreateTemplateMutation } from "@/redux/features/template/templateApi";
+import { CLIENT_URL } from "@/lib/global";
+import { toast } from "sonner";
+import { temp2Html } from "@/lib/datas/generateHtml/temp2";
 
 const Template2Form = () => {
+  const { selectedTmp, generateStep, templateData, html } = useSelector(
+    (state) => state.global
+  );
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
+  const [createTemplate] = useCreateTemplateMutation();
 
   const dispatch = useDispatch();
 
   // stats
   const [isLoading, setIsLoading] = useState(false);
   const [logo, setLogo] = useState(null);
+  const [banner, setBanner] = useState(null);
 
   // refs
   const logoRef = useRef();
@@ -48,6 +59,21 @@ const Template2Form = () => {
     });
   };
 
+  const handleSave = async () => {
+    const options = {
+      data: { template: templateData },
+    };
+    const result = await createTemplate(options);
+    if (result?.data?.success) {
+      toast.success("Business Card Save Success");
+      dispatch(setTempResult(result?.data?.data));
+      dispatch(setGenerateStep(2));
+    } else {
+      toast.error("Business Card Save Failed");
+    }
+    setIsLoading(false);
+  };
+
   const handleGenerate = async (data) => {
     if (!logo) {
       logoRef.current.focus();
@@ -55,38 +81,12 @@ const Template2Form = () => {
     }
     setIsLoading(true);
     const url = await convertImageToBase64(logo);
-    setTimeout(() => {
-      dispatch(setTemplateData({ ...data, logo: url }));
-      const html = `<div
-  style="display: flex;align-items: start; width: 300px; height: fit-content; padding: 10px; background: ghostwhite;">
-  <img style="width: 80px; height: 80px; border-radius: 50%;"
-      src="${url}"
-      alt="">
-  <div style="border-left: 1px solid gray; padding: 0px 5px;">
-      <h1 style="font-size: 16px;margin: 0px; font-family: Arial, Helvetica, sans-serif;">${data?.name}</h1>
-      <p style="font-size: 12px;margin: 0px; font-family: Arial, Helvetica, sans-serif;">
-      ${data?.designation}
-      </p>
-      <p style="padding-top: 5px; color: black;"><a href="#"
-              style="font-size: 12px;text-decoration: none; font-family: Arial, Helvetica, sans-serif;color: black;">
-              ${data?.address}
-          </a></p>
-      <div style="display: flex; align-items: center; gap: 10px;">
-          <img style="width: 20px; height: 20px; border-radius: 50%;"
-              src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="">
-          <img style="width: 20px; height: 20px; border-radius: 50%;"
-              src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="">
-          <img style="width: 20px; height: 20px; border-radius: 50%;"
-              src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="">
-          <img style="width: 20px; height: 20px; border-radius: 50%;"
-              src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="">
-      </div>
-  </div>
-</div>`;
-      dispatch(setHtml(html));
-      dispatch(setGenerateStep(2));
-      setIsLoading(false);
-    }, 1000);
+    const bannerUrl = await convertImageToBase64(banner);
+
+    dispatch(setTemplateData({ ...data, logo: url, banner: bannerUrl }));
+    const html = await temp2Html({ ...data, logo: url });
+    dispatch(setHtml(html));
+    handleSave();
   };
   return (
     <>
@@ -161,7 +161,52 @@ const Template2Form = () => {
               className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
             />
           </div>
+          <div className="col-span-1">
+            <label
+              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+              htmlFor=""
+            >
+              Phone
+            </label>
+            <input
+              {...register("phone", { required: true })}
+              type="number"
+              required
+              placeholder="Enter Phone"
+              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+            />
+          </div>
 
+          <div className="col-span-2">
+            <label
+              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+              htmlFor=""
+            >
+              Email
+            </label>
+            <input
+              {...register("email", { required: true })}
+              type="email"
+              required
+              placeholder="Enter Email"
+              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+            />
+          </div>
+          <div className="col-span-2">
+            <label
+              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+              htmlFor=""
+            >
+              Website
+            </label>
+            <input
+              {...register("website", { required: true })}
+              type="url"
+              required
+              placeholder="Enter website Url"
+              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+            />
+          </div>
           <div className="col-span-2">
             <label
               className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
@@ -170,13 +215,53 @@ const Template2Form = () => {
               Address
             </label>
             <input
-              {...register("address", { required: true, maxLength: 30 })}
+              {...register("address", { required: true })}
               type="text"
               required
               placeholder="Enter Address"
-              maxLength={30}
               className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
             />
+          </div>
+          <div className="col-span-2">
+            <label
+              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+              htmlFor=""
+            >
+              Title
+            </label>
+            <input
+              {...register("title", { required: true })}
+              type="text"
+              required
+              placeholder="Enter title"
+              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+            />
+          </div>
+          <div className="col-span-2">
+            <label
+              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+              htmlFor=""
+            >
+              Confidential
+            </label>
+            <textarea
+              {...register("confidential", { required: true })}
+              required
+              placeholder="Enter Confidential"
+              className="w-full h-[150px] outline-none border border-black p-2 rounded text-sm"
+            ></textarea>
+          </div>
+
+          <div className="col-span-2">
+            <label
+              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+              htmlFor=""
+            >
+              Banner (Optional)
+            </label>
+            <div className="h-[200px] max-w-[600px] w-full">
+              <BannerInput setFile={setBanner} file={banner} />
+            </div>
           </div>
           <Button
             type="submit"
