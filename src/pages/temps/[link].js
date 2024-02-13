@@ -16,7 +16,7 @@ const TemplateDetails = () => {
   //   useEffect(() => {
   //     refetch();
   //   }, [query.id]);
-  console.log(data);
+  // console.log(data);
   return (
     <div className="container h-screen">
       {isLoading ? (

@@ -8,7 +8,7 @@ import {
 } from "@/redux/features/template/templateApi";
 import { Button } from "@material-tailwind/react";
 import html2canvas from "html2canvas";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import { useDispatch, useSelector } from "react-redux";
 import { ScaleLoader } from "react-spinners";
@@ -58,6 +58,29 @@ const TemplateMain = ({ ticket, templateNo }) => {
     document.body.removeChild(textArea);
   };
 
+  const base64toBlob = (base64Data) => {
+    const byteString = atob(base64Data.split(",")[1]);
+    const mimeString = base64Data.split(",")[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  };
+
+  const downloadStringImage = (imageData, fileName) => {
+    const blob = base64toBlob(imageData);
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName || "image.png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
   const handleSourceCode = async () => {
     const options = {
       data: { email: ticket?.email, html: html },
@@ -68,6 +91,20 @@ const TemplateMain = ({ ticket, templateNo }) => {
     } else {
       toast.error("Something went wrong!");
     }
+  };
+
+  const downloadQRCode = async () => {
+    const element = document.getElementById("qrCode"),
+      canvas = await html2canvas(element),
+      data = canvas.toDataURL("image/jpg"),
+      link = document.createElement("a");
+
+    link.href = data;
+    link.download = "downloaded-image.jpg";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -89,11 +126,20 @@ const TemplateMain = ({ ticket, templateNo }) => {
               <div className="flex justify-center">
                 <div id="print">{selectedTmp?.template}</div>
               </div>
-              <div className="flex justify-center items-center w-full mt-5">
-                <QRCode
-                  value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
-                  style={{ height: "150px", width: "150px" }}
-                />
+              <div className="flex flex-col justify-center items-center w-full mt-5">
+                <div id="qrCode">
+                  <QRCode
+                    value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
+                    style={{ height: "150px", width: "150px" }}
+                  />
+                </div>
+                <button
+                  onClick={downloadQRCode}
+                  className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
+          hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-sm mt-2 px-2"
+                >
+                  Download QR Code
+                </button>
               </div>
               {tempResult?.template_link && (
                 <div className="flex justify-center items-center gap-4 mt-4">
@@ -122,8 +168,11 @@ const TemplateMain = ({ ticket, templateNo }) => {
                   Download
                 </Button>
                 <Button
-                  onClick={() => handleDownload(tempResult?.banner)}
+                  onClick={() =>
+                    downloadStringImage(tempResult?.template?.banner)
+                  }
                   size="sm"
+                  disabled={!tempResult?.template?.banner}
                   className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
           hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500"
                 >
