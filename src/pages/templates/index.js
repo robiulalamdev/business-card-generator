@@ -1,5 +1,4 @@
 import TemplateCard from "@/components/templates/TemplateCard";
-import TemplateCard1 from "@/components/templates/template1/Template1Card";
 import { templates } from "@/lib/datas/templates";
 import React from "react";
 

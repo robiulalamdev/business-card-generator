@@ -17,6 +17,7 @@ import { useCreateTemplateMutation } from "@/redux/features/template/templateApi
 import { CLIENT_URL } from "@/lib/global";
 import { toast } from "sonner";
 import { temp2Html } from "@/lib/datas/generateHtml/temp2";
+import FooterSocialInput from "@/components/commons/FooterSocialInput";
 
 const Template2Form = () => {
   const { selectedTmp, generateStep, templateData, html } = useSelector(
@@ -25,6 +26,8 @@ const Template2Form = () => {
   const {
     handleSubmit,
     register,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm();
   const [createTemplate] = useCreateTemplateMutation();
@@ -61,7 +64,7 @@ const Template2Form = () => {
 
   const handleSave = async () => {
     const options = {
-      data: { template: templateData },
+      data: { template: templateData, template_no: 2 },
     };
     const result = await createTemplate(options);
     if (result?.data?.success) {
@@ -81,11 +84,14 @@ const Template2Form = () => {
     }
     setIsLoading(true);
     const url = await convertImageToBase64(logo);
-    const bannerUrl = await convertImageToBase64(banner);
+    let bannerUrl = "";
+    if (banner) {
+      bannerUrl = await convertImageToBase64(banner);
+    }
 
-    dispatch(setTemplateData({ ...data, logo: url, banner: bannerUrl }));
+    await dispatch(setTemplateData({ ...data, logo: url, banner: bannerUrl }));
     const html = await temp2Html({ ...data, logo: url });
-    dispatch(setHtml(html));
+    await dispatch(setHtml(html));
     handleSave();
   };
   return (
@@ -252,6 +258,55 @@ const Template2Form = () => {
             ></textarea>
           </div>
 
+          <div className="grid grid-cols-1 gap-2 col-span-2">
+            <div className="">
+              <label
+                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+                htmlFor=""
+              >
+                Facebook
+              </label>
+              <input
+                {...register("facebook", { required: true })}
+                type="url"
+                required
+                placeholder="Enter URL"
+                className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+              />
+            </div>
+
+            <div className="">
+              <label
+                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+                htmlFor=""
+              >
+                Instagram
+              </label>
+              <input
+                {...register("instagram", { required: true })}
+                type="url"
+                required
+                placeholder="Enter URL"
+                className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+              />
+            </div>
+            <div className="">
+              <label
+                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+                htmlFor=""
+              >
+                Pinterest
+              </label>
+              <input
+                {...register("pinterest", { required: true })}
+                type="url"
+                required
+                placeholder="Enter URL"
+                className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+              />
+            </div>
+          </div>
+
           <div className="col-span-2">
             <label
               className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
@@ -263,6 +318,13 @@ const Template2Form = () => {
               <BannerInput setFile={setBanner} file={banner} />
             </div>
           </div>
+          <h1>Footer Information</h1>
+          <FooterSocialInput
+            register={register}
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
+          />
           <Button
             type="submit"
             className="flex justify-center items-center gap-2 max-w-[180px] w-full h-[48px] shadow-none hover:shadow-none rounded-sm bg-primary"
@@ -280,14 +342,6 @@ const Template2Form = () => {
           </Button>
         </form>
       </div>
-      {/* <Dialog
-        size="xs"
-        open={!isLoading && cardData}
-        handler={() => setCardData(null)}
-        className="bg-white flex justify-center items-center py-5"
-      >
-        <TemplateCard1 cardData={cardData} />
-      </Dialog> */}
     </>
   );
 };

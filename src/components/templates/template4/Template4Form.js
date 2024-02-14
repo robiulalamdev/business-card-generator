@@ -12,23 +12,20 @@ import {
   setTempResult,
   setTemplateData,
 } from "@/redux/features/globals/globalsSlice";
-import FooterSocialInput from "@/components/commons/FooterSocialInput";
 import BannerInput from "@/components/commons/BannerInput";
-import { temp1Html } from "@/lib/datas/generateHtml/temp2";
 import { useCreateTemplateMutation } from "@/redux/features/template/templateApi";
 import { toast } from "sonner";
+import { temp2Html } from "@/lib/datas/generateHtml/temp2";
+import FooterSocialInput from "@/components/commons/FooterSocialInput";
+import { temp4Html } from "@/lib/datas/generateHtml/temp4";
 
-const Template1Form = () => {
-  const { selectedTmp, generateStep, templateData } = useSelector(
-    (state) => state.global
-  );
-  const { handlePhoneNumberInput, handleNumber } = useInputPattern();
+const Template4Form = () => {
+  const { templateData } = useSelector((state) => state.global);
   const {
     handleSubmit,
     register,
     setValue,
     watch,
-    control,
     formState: { errors },
   } = useForm();
   const [createTemplate] = useCreateTemplateMutation();
@@ -65,7 +62,7 @@ const Template1Form = () => {
 
   const handleSave = async () => {
     const options = {
-      data: { template: templateData, template_no: 1 },
+      data: { template: templateData, template_no: 4 },
     };
     const result = await createTemplate(options);
     if (result?.data?.success) {
@@ -83,6 +80,7 @@ const Template1Form = () => {
       logoRef.current.focus();
       return;
     }
+
     setIsLoading(true);
     const url = await convertImageToBase64(logo);
     let bannerUrl = "";
@@ -90,8 +88,17 @@ const Template1Form = () => {
       bannerUrl = await convertImageToBase64(banner);
     }
 
-    await dispatch(setTemplateData({ ...data, logo: url, banner: bannerUrl }));
-    const html = await temp1Html({ ...data, logo: url });
+    await dispatch(
+      setTemplateData({
+        ...data,
+        logo: url,
+        banner: bannerUrl,
+      })
+    );
+    const html = await temp4Html({
+      ...data,
+      logo: url,
+    });
     await dispatch(setHtml(html));
     handleSave();
   };
@@ -137,6 +144,7 @@ const Template1Form = () => {
               />
             </Button>
           </div>
+
           <div className="col-span-2">
             <label
               className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
@@ -178,7 +186,6 @@ const Template1Form = () => {
             <input
               {...register("phone", { required: true })}
               type="number"
-              onInput={handleNumber}
               required
               placeholder="Enter Phone"
               className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
@@ -230,7 +237,21 @@ const Template1Form = () => {
               className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
             />
           </div>
-
+          <div className="col-span-2">
+            <label
+              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+              htmlFor=""
+            >
+              Title
+            </label>
+            <input
+              {...register("title", { required: true })}
+              type="text"
+              required
+              placeholder="Enter title"
+              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+            />
+          </div>
           <div className="col-span-2">
             <label
               className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
@@ -306,7 +327,6 @@ const Template1Form = () => {
               <BannerInput setFile={setBanner} file={banner} />
             </div>
           </div>
-
           <h1>Footer Information</h1>
           <FooterSocialInput
             register={register}
@@ -331,16 +351,8 @@ const Template1Form = () => {
           </Button>
         </form>
       </div>
-      {/* <Dialog
-        size="xs"
-        open={!isLoading && cardData}
-        handler={() => setCardData(null)}
-        className="bg-white flex justify-center items-center py-5"
-      >
-        <TemplateCard1 cardData={cardData} />
-      </Dialog> */}
     </>
   );
 };
 
-export default Template1Form;
+export default Template4Form;

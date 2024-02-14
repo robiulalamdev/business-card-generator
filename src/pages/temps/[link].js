@@ -67,7 +67,7 @@ const TemplateDetails = () => {
               </div>
             )}
           </div>
-          <LIveTempFooter data={data?.data} />
+          <LIveTempFooter data={data?.data?.template?.footer} />
         </div>
       )}
     </div>

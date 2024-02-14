@@ -32,5 +32,5 @@ module.exports = withMT({
       display: ["group-focus", "group-hover"],
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-all")],
 });

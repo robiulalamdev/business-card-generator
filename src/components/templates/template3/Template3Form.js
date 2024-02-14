@@ -12,23 +12,20 @@ import {
   setTempResult,
   setTemplateData,
 } from "@/redux/features/globals/globalsSlice";
-import FooterSocialInput from "@/components/commons/FooterSocialInput";
 import BannerInput from "@/components/commons/BannerInput";
-import { temp1Html } from "@/lib/datas/generateHtml/temp2";
 import { useCreateTemplateMutation } from "@/redux/features/template/templateApi";
 import { toast } from "sonner";
+import { temp2Html } from "@/lib/datas/generateHtml/temp2";
+import FooterSocialInput from "@/components/commons/FooterSocialInput";
+import { temp3Html } from "@/lib/datas/generateHtml/temp3";
 
-const Template1Form = () => {
-  const { selectedTmp, generateStep, templateData } = useSelector(
-    (state) => state.global
-  );
-  const { handlePhoneNumberInput, handleNumber } = useInputPattern();
+const Template3Form = () => {
+  const { templateData } = useSelector((state) => state.global);
   const {
     handleSubmit,
     register,
     setValue,
     watch,
-    control,
     formState: { errors },
   } = useForm();
   const [createTemplate] = useCreateTemplateMutation();
@@ -38,10 +35,12 @@ const Template1Form = () => {
   // stats
   const [isLoading, setIsLoading] = useState(false);
   const [logo, setLogo] = useState(null);
+  const [signature, setSignature] = useState(null);
   const [banner, setBanner] = useState(null);
 
   // refs
   const logoRef = useRef();
+  const signatureRef = useRef();
 
   const convertImageToBase64 = async (imageFile) => {
     return new Promise((resolve, reject) => {
@@ -65,7 +64,7 @@ const Template1Form = () => {
 
   const handleSave = async () => {
     const options = {
-      data: { template: templateData, template_no: 1 },
+      data: { template: templateData, template_no: 3 },
     };
     const result = await createTemplate(options);
     if (result?.data?.success) {
@@ -83,15 +82,31 @@ const Template1Form = () => {
       logoRef.current.focus();
       return;
     }
+    if (!signature) {
+      signatureRef.current.focus();
+      return;
+    }
     setIsLoading(true);
     const url = await convertImageToBase64(logo);
     let bannerUrl = "";
     if (banner) {
       bannerUrl = await convertImageToBase64(banner);
     }
+    const signatureUrl = await convertImageToBase64(signature);
 
-    await dispatch(setTemplateData({ ...data, logo: url, banner: bannerUrl }));
-    const html = await temp1Html({ ...data, logo: url });
+    await dispatch(
+      setTemplateData({
+        ...data,
+        logo: url,
+        banner: bannerUrl,
+        signature: signatureUrl,
+      })
+    );
+    const html = await temp3Html({
+      ...data,
+      logo: url,
+      signature: signatureUrl,
+    });
     await dispatch(setHtml(html));
     handleSave();
   };
@@ -142,6 +157,42 @@ const Template1Form = () => {
               className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
               htmlFor=""
             >
+              Signature
+            </label>
+            <Button
+              onClick={() => signatureRef.current.click()}
+              className={`w-full h-[160px] rounded shadow-none border-2 hover:shadow-none bg-primary_gw flex flex-col justify-center gap-4 items-center`}
+            >
+              {signature ? (
+                <img
+                  className="w-full h-full object-contain"
+                  src={URL.createObjectURL(signature)}
+                  alt=""
+                />
+              ) : (
+                <>
+                  <div className="max-w-[60px] text-primary">{iUpload}</div>
+                  <h1 className="text-gray-500 text-sm font-normal !normal-case text-current">
+                    Upload Signature Image <span>(.png, .jpg, jpeg)</span>
+                  </h1>
+                </>
+              )}
+              <input
+                ref={signatureRef}
+                onChange={(e) => setSignature(e.target.files[0])}
+                type="file"
+                multiple={false}
+                accept=".png, .jpg, .jpeg"
+                className="opacity-0 hidden"
+                required
+              />
+            </Button>
+          </div>
+          <div className="col-span-2">
+            <label
+              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+              htmlFor=""
+            >
               Name
             </label>
             <input
@@ -178,7 +229,6 @@ const Template1Form = () => {
             <input
               {...register("phone", { required: true })}
               type="number"
-              onInput={handleNumber}
               required
               placeholder="Enter Phone"
               className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
@@ -230,7 +280,21 @@ const Template1Form = () => {
               className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
             />
           </div>
-
+          <div className="col-span-2">
+            <label
+              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+              htmlFor=""
+            >
+              Title
+            </label>
+            <input
+              {...register("title", { required: true })}
+              type="text"
+              required
+              placeholder="Enter title"
+              className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+            />
+          </div>
           <div className="col-span-2">
             <label
               className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
@@ -306,7 +370,6 @@ const Template1Form = () => {
               <BannerInput setFile={setBanner} file={banner} />
             </div>
           </div>
-
           <h1>Footer Information</h1>
           <FooterSocialInput
             register={register}
@@ -331,16 +394,8 @@ const Template1Form = () => {
           </Button>
         </form>
       </div>
-      {/* <Dialog
-        size="xs"
-        open={!isLoading && cardData}
-        handler={() => setCardData(null)}
-        className="bg-white flex justify-center items-center py-5"
-      >
-        <TemplateCard1 cardData={cardData} />
-      </Dialog> */}
     </>
   );
 };
 
-export default Template1Form;
+export default Template3Form;
