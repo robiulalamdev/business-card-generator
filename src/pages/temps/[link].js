@@ -39,35 +39,7 @@ const TemplateDetails = () => {
         </div>
       ) : (
         <div className="w-full h-full">
-          <LiveTempHeader data={data?.data} />
-          <LiveTempLogo logo={data?.data?.template?.logo} />
           <LiveTempPhoneDesign data={data?.data} />
-          <LiveBanner banner={data?.data?.template?.banner} />
-          <LIveTempFooter data={data?.data?.template?.footer} />
-
-          <div className="grid md:grid-cols-4 items-start mt-5 pb-5">
-            <div></div>
-            <div className="border border-black p-4 col-span-2 w-full relative">
-              <div className="flex justify-center items-center w-full">
-                <div id="qrCode" className="p-1">
-                  <QRCode
-                    value={`${CLIENT_URL}/temps/${data?.data?.template_link}`}
-                    style={{ height: "150px", width: "150px" }}
-                  />
-                </div>
-              </div>
-
-              <div className="absolute bottom-0 right-0 w-fit h-fit flex justify-center items-center">
-                <Button
-                  onClick={() => downloadQRCode()}
-                  className="rounded-sm shadow-none hover:shadow-none h-8 bg-primary p-0 w-14 flex justify-center items-center text-xs text-current text-white"
-                >
-                  {iDown}
-                </Button>
-              </div>
-            </div>
-            <div></div>
-          </div>
         </div>
       )}
     </div>

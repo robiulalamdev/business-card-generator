@@ -38,25 +38,14 @@ const LiveTempPhoneDesign = ({ data }) => {
   };
 
   return (
-    <div className="grid md:grid-cols-4 items-start">
-      <div className="flex flex-col items-end justify-end w-full px-4">
-        <h1 className="font-semibold">Template</h1>
-        <Button
-          onClick={() => handleDownloadImage()}
-          size="sm"
-          className="rounded-sm shadow-none hover:shadow-none h-8  bg-gradient-to-r from-blue-700 to-primary
-  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
-        >
-          Download
-        </Button>
-      </div>
+    <>
       <div
         id="print"
-        className="flex justify-center items-center w-full h-fit border-x border-t border-black p-4 col-span-2"
+        className="flex justify-center items-center w-full h-fit max-w-[500px] mx-auto mt-8"
       >
         {template && template?.small_code}
       </div>
-    </div>
+    </>
   );
 };
 

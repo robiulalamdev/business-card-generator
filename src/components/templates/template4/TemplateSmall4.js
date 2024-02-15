@@ -1,224 +1,139 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+import { CLIENT_URL } from "@/lib/global";
+import { iLocation, iMail, iPhone, iWeb } from "@/lib/icons/icons";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import QRCode from "react-qr-code";
 import { useSelector } from "react-redux";
 
 const TemplateSmall4 = () => {
   const { liveTempData } = useSelector((state) => state.global);
 
   return (
-    <div>
-      <div id="print" className="bg-blue-50 border-2 p-2">
-        <div className="flex flex-col items-center w-full gap-2">
-          <img
-            src={liveTempData?.template?.logo}
-            alt=""
-            className="size-[80px] rounded-full object-cover"
-          />
-          <div className="w-full">
-            <h1 className="font-bold uppercase text-center text-orange-600">
-              {liveTempData?.template?.name}
-            </h1>
-            <p className="text-xs text-center">
-              {liveTempData?.template?.designation}
-            </p>
+    <div id="print" className="p-1">
+      <div className="bg-black h-fit pb-4 rounded-md">
+        <div className="relative h-[200px]">
+          <div className="rounded-t-md overflow-hidden max-h-[180px]">
+            <img
+              src="https://www.fgdc.gov/img/slider/slider-bg-network.jpg/image"
+              alt="image"
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <div className="absolute -bottom-7 w-full flex justify-center items-center">
+            <img
+              src={liveTempData?.template?.logo}
+              alt=""
+              className="h-[100px] w-[100px] object-cover rounded-full border-2 border-white"
+            />
+          </div>
+        </div>
+        <div className="mt-10">
+          <h1 className="text-center font-extrabold font-inter text-white">
+            {liveTempData?.template?.name}
+          </h1>
+          <p className="text-center text-sm font-semibold font-inter text-orange-600">
+            {liveTempData?.template?.designation}
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-3 mt-8 ml-6 md:ml-20">
+          <a
+            href={`tel:+${liveTempData?.template?.phone}`}
+            target="_blank"
+            className="flex items-center gap-2 text-white h-fit"
+          >
+            <div className="text-orange-600">{iPhone}</div>
+            <p>+{liveTempData?.template?.phone}</p>
+          </a>
 
-            <div className="w-full">
-              <tr>
-                <td
-                  width="320"
-                  style={{
-                    lineHeight: "14pt",
-                    fontSize: "13px",
-                    color: "#000000",
-                    paddingTop: "3px",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: "0",
-                      fontSize: "13px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      moz-do-not-send="true"
-                      border="0"
-                      width="12"
-                      height="12"
-                      src="https://i.ibb.co/x8Z5QXw/pphone.png"
-                      style={{ verticalAlign: "middle" }}
-                    />
-                    &nbsp;&nbsp;
-                    <a
-                      href={`tel:+${liveTempData?.template?.phone}`}
-                      target="_blank"
-                      style={{ color: "#000000", textDecoration: "none" }}
-                    >
-                      +{liveTempData?.template?.phone}
-                    </a>
-                  </p>
-                  <p
-                    style={{
-                      margin: "0",
-                      fontSize: "13px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      moz-do-not-send="true"
-                      border="0"
-                      width="12"
-                      height="12"
-                      src="https://i.ibb.co/zbFn7SR/gmail.png"
-                      style={{ verticalAlign: "middle" }}
-                    />
-                    &nbsp;&nbsp;
-                    <a
-                      href={`mailto:${liveTempData?.template?.email}`}
-                      target="_blank"
-                      style={{ color: "#000000", textDecoration: "none" }}
-                    >
-                      {liveTempData?.template?.email}
-                    </a>
-                  </p>
-                  <p
-                    style={{
-                      margin: "0",
-                      fontSize: "13px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      moz-do-not-send="true"
-                      border="0"
-                      width="12"
-                      height="12"
-                      src="https://i.ibb.co/xz1yNcH/website.png"
-                      style={{ verticalAlign: "middle" }}
-                    />
-                    &nbsp;&nbsp;
-                    <a
-                      href={liveTempData?.template?.website}
-                      target="_blank"
-                      style={{ color: "#000000", textDecoration: "none" }}
-                    >
-                      {liveTempData?.template?.website}
-                    </a>
-                  </p>
-                  <p
-                    style={{
-                      margin: "0",
-                      fontSize: "13px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      moz-do-not-send="true"
-                      border="0"
-                      width="12"
-                      height="12"
-                      src="https://i.imgur.com/BNojrbl.png"
-                      style={{ verticalAlign: "middle" }}
-                    />
-                    &nbsp;&nbsp;
-                    {liveTempData?.template?.address}
-                  </p>
-                </td>
-              </tr>
-              <div
-                className="w-full"
-                style={{
-                  backgroundColor: "#434f68",
-                  borderBottom: "3px solid #db6b27",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  height: "50px",
-                  marginTop: "15px",
-                }}
-              >
-                <div
-                  width="250"
-                  style={{
-                    padding: "5px 0px 3px 10px",
-                    verticalAlign: "middle",
-                    backgroundColor: "#434f68",
-                  }}
-                >
-                  <p style={{ color: "white" }}>
-                    {liveTempData?.template?.title}
-                  </p>
-                </div>
-                <div
-                  style={{
-                    padding: "5px 20px 3px 0",
-                    verticalAlign: "middle",
-                    backgroundColor: "#434f68",
-                    display: "flex",
-                    justifyContent: "end",
-                    alignItems: "center",
-                  }}
-                >
-                  <a
-                    style={{ textDecoration: "none", color: "white" }}
-                    href={liveTempData?.template?.facebook}
-                    target="_blank"
-                  >
-                    <img
-                      src="https://i.imgur.com/YozPtoW.png"
-                      height="20"
-                      width="20"
-                    />{" "}
-                  </a>
-                  &nbsp;
-                  <a
-                    style={{ textDecoration: "none", color: "white" }}
-                    href={liveTempData?.template?.instagram}
-                    target="_blank"
-                  >
-                    <img
-                      src="https://i.imgur.com/JcFgrq2.png"
-                      height="20"
-                      width="20"
-                    />{" "}
-                  </a>
-                  &nbsp;
-                  <a
-                    style={{ textDecoration: "none", color: "white" }}
-                    href={liveTempData?.template?.pinterest}
-                    target="_blank"
-                  >
-                    <img
-                      src="https://i.imgur.com/gGTZtSH.png"
-                      height="20"
-                      width="20"
-                    />{" "}
-                  </a>
-                </div>
-              </div>
+          <a
+            href={`mailto:${liveTempData?.template?.email}`}
+            target="_blank"
+            className="flex items-center gap-2 text-white h-fit"
+          >
+            <div className="text-orange-600">{iMail}</div>
+            <p>{liveTempData?.template?.email}</p>
+          </a>
 
-              <div style={{ paddingTop: "7px" }}>
-                <p
-                  style={{
-                    margin: 0,
-                    fontWeight: "normal",
-                    fontSize: "9px",
-                    textAlign: "justify",
-                    lineHeight: "13px",
-                    color: "#636363",
-                  }}
-                >
-                  <strong style={{ color: "#636363" }}> Confidential: </strong>
-                  {liveTempData?.template?.confidential}
-                </p>
-              </div>
-            </div>
+          <a
+            href={liveTempData?.template?.website}
+            target="_blank"
+            className="flex items-center gap-2 text-white h-fit"
+          >
+            <div className="text-orange-600">{iWeb}</div>
+            <p>{liveTempData?.template?.website}</p>
+          </a>
+
+          <p className="flex items-center gap-2 text-white h-fit">
+            <div className="text-orange-600">{iLocation}</div>
+            <p>{liveTempData?.template?.address}</p>
+          </p>
+        </div>
+
+        <div className="mt-8 py-2 bg-white px-2 flex items-center justify-between border-x-4 border-orange-600">
+          <p className="text-orange-600">{liveTempData?.template?.title}</p>
+          <div className="flex justify-end items-center gap-1">
+            <a
+              style={{ textDecoration: "none", color: "white" }}
+              href="https://www.facebook.com/fixwebsiteerrors"
+              target="_blank"
+            >
+              <img
+                src="https://i.imgur.com/YozPtoW.png"
+                height="25"
+                width="25"
+              />
+            </a>
+            &nbsp;
+            <a
+              style={{ textDecoration: "none", color: "white" }}
+              href="https://www.instagram.com/fixwebsiteissue/"
+              target="_blank"
+            >
+              <img
+                src="https://i.imgur.com/JcFgrq2.png"
+                height="25"
+                width="25"
+              />
+            </a>
+            &nbsp;
+            <a
+              style={{ textDecoration: "none", color: "white" }}
+              href="https://www.pinterest.com/fixwebsiteissue/"
+              target="_blank"
+            >
+              <img
+                src="https://i.imgur.com/gGTZtSH.png"
+                height="25"
+                width="25"
+              />
+            </a>
+          </div>
+        </div>
+
+        <div className="mt-3 px-4">
+          <p
+            style={{
+              margin: "0",
+              fontFamily: "'Montserrat', sans-serif",
+              fontWeight: "normal",
+              fontSize: "9px",
+              lineHeight: "13px",
+            }}
+            className="text-gray-400"
+          >
+            <strong style={{ color: "orange" }}> Confidential: </strong>{" "}
+            {liveTempData?.template?.confidential}
+          </p>
+        </div>
+        <div className="flex flex-col justify-center items-center w-full mt-8">
+          <h1 className="text-center font-semibold text-orange-600">Scan Me</h1>
+          <div id="qrCode" className="p-1 bg-white">
+            <QRCode
+              value={`${CLIENT_URL}/temps/${liveTempData?.template_link}`}
+              style={{ height: "150px", width: "150px" }}
+            />
           </div>
         </div>
       </div>
