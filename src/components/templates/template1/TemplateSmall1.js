@@ -13,13 +13,6 @@ const TemplateSmall1 = () => {
     <div id="print" className="p-1">
       <div className="bg-black h-fit pb-4 rounded-md">
         <div className="relative h-[200px]">
-          <div className="absolute top-2 left-2 bg-white p-3">
-            <img
-              className="max-w-[150px] object-contain"
-              src={liveTempData?.template?.signature}
-            />
-          </div>
-
           <div className="rounded-t-md overflow-hidden max-h-[180px]">
             <img
               src="https://www.fgdc.gov/img/slider/slider-bg-network.jpg/image"
