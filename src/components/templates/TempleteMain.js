@@ -17,24 +17,12 @@ import LiveBanner from "../LiveTemp/LiveBanner";
 import LiveTempLogo from "../LiveTemp/LiveTempLogo";
 import LIveTempFooter from "../LiveTemp/LIveTempFooter";
 
-const TemplateMain = ({ ticket, templateNo }) => {
+const TemplateMain = () => {
   const [sendSourceCode] = useSendSourceCodeMutation();
-
-  const { selectedTmp, generateStep, templateData, html, tempResult } =
+  const { selectedTmp, generateStep, templateData, html, tempResult, ticket } =
     useSelector((state) => state.global);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-
-  const handleGetData = () => {
-    const template = templates.find((tmp) => tmp._id === templateNo);
-    dispatch(setSelectedTmp(template));
-    setIsLoading(false);
-  };
-
-  useMemo(() => {
-    setIsLoading(true);
-    handleGetData();
-  }, [templateNo]);
 
   const handleDownloadImage = async () => {
     const element = document.getElementById("print"),
@@ -110,7 +98,6 @@ const TemplateMain = ({ ticket, templateNo }) => {
     link.click();
     document.body.removeChild(link);
   };
-  console.log(tempResult);
   return (
     <>
       <div className="container h-screen">
@@ -124,72 +111,82 @@ const TemplateMain = ({ ticket, templateNo }) => {
             {selectedTmp && generateStep === 2 && (
               <>
                 <LiveTempLogo logo={tempResult?.template?.logo} />
-                <div id="print" className="mt-16">
-                  {selectedTmp?.template}
-                </div>
+                <>
+                  <div className="grid md:grid-cols-4 items-start">
+                    <div className="flex flex-col items-end justify-end w-full px-4">
+                      <h1 className="font-semibold">Template</h1>
+                      <Button
+                        onClick={() => handleDownloadImage()}
+                        size="sm"
+                        className="rounded-sm shadow-none hover:shadow-none h-8  bg-gradient-to-r from-blue-700 to-primary
+                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
+                      >
+                        Download
+                      </Button>
+                    </div>
+                    <div
+                      id="print"
+                      className="border-x border-t border-black p-4 col-span-2"
+                    >
+                      {selectedTmp?.template}
+                    </div>
+                    <div></div>
+                  </div>
+                </>
+
                 <LiveBanner banner={tempResult?.template?.banner} />
                 <LIveTempFooter data={tempResult?.template?.footer} />
-                <div className="flex flex-col justify-center items-center w-full mt-5">
-                  <div id="qrCode">
-                    <QRCode
-                      value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
-                      style={{ height: "150px", width: "150px" }}
-                    />
-                  </div>
-                  <button
-                    onClick={downloadQRCode}
-                    className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-sm mt-2 px-2"
-                  >
-                    Download QR Code
-                  </button>
-                </div>
-                {tempResult?.template_link && (
-                  <div className="flex justify-center items-center gap-4 mt-4">
-                    <div className="text-xs min-h-[40px] w-fit max-w-[800px] bg-black text-gray-300 px-2 flex items-center rounded">
-                      {`${CLIENT_URL}/temps/${tempResult?.template_link}`}
-                    </div>
+                <div className="grid md:grid-cols-4 items-start">
+                  <div className="flex flex-col items-end justify-end w-full px-4">
+                    <h1 className="font-semibold">QR Code</h1>
                     <Button
-                      onClick={() =>
-                        copyToClipboard(
-                          `${CLIENT_URL}/temps/${tempResult?.template_link}`
-                        )
-                      }
-                      className="bg-primary h-10 w-14 flex justify-center items-center shadow-none hover:shadow-none text-white text-xs rounded"
+                      onClick={downloadQRCode}
+                      size="sm"
+                      className="rounded-sm shadow-none hover:shadow-none h-8  bg-gradient-to-r from-blue-700 to-primary
+                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
                     >
-                      <small>Copy</small>
+                      Download
                     </Button>
                   </div>
-                )}
-                <div className="flex justify-center items-center gap-4 mt-8">
-                  <Button
-                    onClick={() => handleDownloadImage()}
-                    size="sm"
-                    className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
+                  <div className="border border-black p-4 col-span-2">
+                    <div className="flex justify-center items-center w-full ">
+                      <div id="qrCode" className="p-1">
+                        <QRCode
+                          value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
+                          style={{ height: "150px", width: "150px" }}
+                        />
+                      </div>
+                    </div>
+                    {tempResult?.template_link && (
+                      <div className="flex justify-center items-center gap-4 mt-4">
+                        <div className="text-xs min-h-[40px] w-fit max-w-[800px] bg-black text-gray-300 px-2 flex items-center rounded">
+                          {`${CLIENT_URL}/temps/${tempResult?.template_link}`}
+                        </div>
+                        <Button
+                          onClick={() =>
+                            copyToClipboard(
+                              `${CLIENT_URL}/temps/${tempResult?.template_link}`
+                            )
+                          }
+                          className="bg-primary h-10 w-14 flex justify-center items-center shadow-none hover:shadow-none text-white text-xs rounded"
+                        >
+                          <small>Copy</small>
+                        </Button>
+                      </div>
+                    )}
+                    <div className="flex justify-center items-center gap-4 mt-8">
+                      <Button
+                        onClick={() => handleSourceCode()}
+                        size="sm"
+                        className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
                   hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500"
-                  >
-                    Download
-                  </Button>
-                  <Button
-                    onClick={() =>
-                      downloadStringImage(tempResult?.template?.banner)
-                    }
-                    size="sm"
-                    disabled={!tempResult?.template?.banner}
-                    className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500"
-                  >
-                    Download Banner
-                  </Button>
+                      >
+                        Get Source Code
+                      </Button>
+                    </div>
+                  </div>
 
-                  <Button
-                    onClick={() => handleSourceCode()}
-                    size="sm"
-                    className="rounded shadow-none hover:shadow-none h-10 text-white bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500"
-                  >
-                    Get Source Code
-                  </Button>
+                  <div></div>
                 </div>
               </>
             )}

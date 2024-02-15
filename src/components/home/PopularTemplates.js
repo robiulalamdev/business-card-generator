@@ -15,18 +15,6 @@ const PopularTemplates = () => {
           {templates.map((tmp, index) => (
             <TemplateCard key={index} template={tmp} />
           ))}
-          {templates.map((tmp, index) => (
-            <TemplateCard key={index} template={tmp} />
-          ))}
-          {templates.map((tmp, index) => (
-            <TemplateCard key={index} template={tmp} />
-          ))}
-          {templates.map((tmp, index) => (
-            <TemplateCard key={index} template={tmp} />
-          ))}
-          {templates.map((tmp, index) => (
-            <TemplateCard key={index} template={tmp} />
-          ))}
         </div>
       </div>
     </>

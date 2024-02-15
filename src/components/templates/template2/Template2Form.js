@@ -14,7 +14,6 @@ import {
 } from "@/redux/features/globals/globalsSlice";
 import BannerInput from "@/components/commons/BannerInput";
 import { useCreateTemplateMutation } from "@/redux/features/template/templateApi";
-import { CLIENT_URL } from "@/lib/global";
 import { toast } from "sonner";
 import { temp2Html } from "@/lib/datas/generateHtml/temp2";
 import FooterSocialInput from "@/components/commons/FooterSocialInput";

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  ticket: null,
   selectedTmp: null,
   templateData: null,
   templateSmallData: null,
@@ -14,6 +15,9 @@ const globalsSlice = createSlice({
   name: "Global slice",
   initialState,
   reducers: {
+    setTicket: (state, action) => {
+      state.ticket = action.payload;
+    },
     setSelectedTmp: (state, action) => {
       state.selectedTmp = action.payload;
     },
@@ -39,6 +43,7 @@ const globalsSlice = createSlice({
 });
 
 export const {
+  setTicket,
   setSelectedTmp,
   setTemplateData,
   setHtml,

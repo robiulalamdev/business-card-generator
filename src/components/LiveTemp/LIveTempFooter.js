@@ -5,9 +5,10 @@ import instagram from "../../assets/icons/social (2).png";
 import linkedin from "../../assets/icons/social (3).png";
 import twitter from "../../assets/icons/social (4).png";
 import Image from "next/image";
+import { Button } from "@material-tailwind/react";
 
 const LIveTempFooter = ({ data }) => {
-  console.log(data);
+  // console.log(data);
   return (
     <div className="flex justify-center items-center gap-3 flex-wrap mt-4">
       {data?.facebook && (

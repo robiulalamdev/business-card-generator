@@ -14,9 +14,9 @@ import {
 } from "@/redux/features/globals/globalsSlice";
 import FooterSocialInput from "@/components/commons/FooterSocialInput";
 import BannerInput from "@/components/commons/BannerInput";
-import { temp1Html } from "@/lib/datas/generateHtml/temp2";
 import { useCreateTemplateMutation } from "@/redux/features/template/templateApi";
 import { toast } from "sonner";
+import { temp1Html } from "@/lib/datas/generateHtml/temp1";
 
 const Template1Form = () => {
   const { selectedTmp, generateStep, templateData } = useSelector(

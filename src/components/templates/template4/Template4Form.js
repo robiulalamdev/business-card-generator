@@ -15,7 +15,6 @@ import {
 import BannerInput from "@/components/commons/BannerInput";
 import { useCreateTemplateMutation } from "@/redux/features/template/templateApi";
 import { toast } from "sonner";
-import { temp2Html } from "@/lib/datas/generateHtml/temp2";
 import FooterSocialInput from "@/components/commons/FooterSocialInput";
 import { temp4Html } from "@/lib/datas/generateHtml/temp4";
 
