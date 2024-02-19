@@ -10,14 +10,14 @@ const Card2 = () => {
   return (
     <div className="bg-white h-full pb-4 border-4 ">
       <div className="relative h-[200px]">
-        <div className="rounded-t-md overflow-hidden max-h-[180px] border-b-2">
+        <div className="rounded-t-md overflow-hidden max-h-[200px] border-b-2">
           <img
-            src={liveTempData?.template?.banner}
+            src="https://t4.ftcdn.net/jpg/05/31/79/69/360_F_531796938_Gww8GsUSycc78QiaR5seCzl9RW1gr6vU.jpg"
             alt="image"
-            className="object-cover w-full h-full min-h-[180px]"
+            className="object-cover w-full h-full min-h-[200px]"
           />
         </div>
-        <div className="absolute -bottom-10 w-full flex justify-center items-center">
+        <div className="absolute -bottom-16 w-full flex justify-center items-center">
           <img
             src={liveTempData?.template?.logo}
             alt=""
@@ -25,7 +25,7 @@ const Card2 = () => {
           />
         </div>
       </div>
-      <div className="mt-14">
+      <div className="mt-20">
         <h1 className="text-center font-extrabold font-inter text-black">
           {liveTempData?.template?.name}
         </h1>
