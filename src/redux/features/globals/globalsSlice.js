@@ -37,6 +37,7 @@ const globalsSlice = createSlice({
       state.templateSmallData = action.payload;
     },
     setLiveTempData: (state, action) => {
+      console.log(action.payload);
       state.liveTempData = action.payload;
     },
   },

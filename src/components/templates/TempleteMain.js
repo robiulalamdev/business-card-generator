@@ -2,10 +2,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { templates } from "@/lib/datas/templates";
 import { CLIENT_URL } from "@/lib/global";
-import { setSelectedTmp } from "@/redux/features/globals/globalsSlice";
+import {
+  setLiveTempData,
+  setSelectedTmp,
+  setTempResult,
+} from "@/redux/features/globals/globalsSlice";
 import {
   useCreateTemplateMutation,
   useSendSourceCodeMutation,
+  useUpdateTempByIdMutation,
 } from "@/redux/features/template/templateApi";
 import { Button } from "@material-tailwind/react";
 import html2canvas from "html2canvas";
@@ -18,28 +23,18 @@ import LiveBanner from "../LiveTemp/LiveBanner";
 import LiveTempLogo from "../LiveTemp/LiveTempLogo";
 import LIveTempFooter from "../LiveTemp/LIveTempFooter";
 import { SpinnerCircularFixed } from "spinners-react";
+import { dcards } from "@/lib/datas/digital-cards";
+import Image from "next/image";
 
 const TemplateMain = () => {
   const [sendSourceCode, { isLoading: sourceLoading }] =
     useSendSourceCodeMutation();
+  const [updateTempById, { isLoading: updateLoading }] =
+    useUpdateTempByIdMutation();
   const { selectedTmp, generateStep, templateData, html, tempResult, ticket } =
     useSelector((state) => state.global);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-
-  const handleDownloadImage = async () => {
-    const element = document.getElementById("print"),
-      canvas = await html2canvas(element),
-      data = canvas.toDataURL("image/jpg"),
-      link = document.createElement("a");
-
-    link.href = data;
-    link.download = "downloaded-image.jpg";
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   const copyToClipboard = (text) => {
     const textArea = document.createElement("textarea");
@@ -62,18 +57,6 @@ const TemplateMain = () => {
       ia[i] = byteString.charCodeAt(i);
     }
     return new Blob([ab], { type: mimeString });
-  };
-
-  const downloadStringImage = (imageData, fileName) => {
-    const blob = base64toBlob(imageData);
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName || "image.png";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
   };
 
   const handleSourceCode = async () => {
@@ -129,6 +112,23 @@ const TemplateMain = () => {
     link.click();
     document.body.removeChild(link);
   };
+
+  const handleChooseDcard = async (id) => {
+    let { dcard_id, ...other } = tempResult;
+    const options = {
+      data: { dcard_id: id },
+      id: tempResult?._id,
+    };
+    const result = await updateTempById(options);
+    if (result?.data?.success) {
+      dispatch(setTempResult({ ...other, dcard_id: id }));
+      toast.success("Digital Card Choose Success");
+    } else {
+      toast.error("Digital Card Choose Failed");
+    }
+  };
+
+  console.log(tempResult);
   return (
     <>
       <div className="container h-screen">
@@ -217,6 +217,33 @@ const TemplateMain = () => {
                         value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
                         style={{ height: "150px", width: "150px" }}
                       />
+                    </div>
+                  </div>
+
+                  <div className="mt-8 max-w-[600px] w-full mx-auto border rounded-md p-2 h-fit">
+                    <h1 className="text-left font-bold mb-2">
+                      Choose Digital Card
+                    </h1>
+                    <div className="w-full ">
+                      <div className="p-1 grid grid-cols-3 gap-4">
+                        {dcards.map((dCard, index) => (
+                          <div
+                            onClick={() => handleChooseDcard(dCard?._id)}
+                            key={index}
+                            className={`flex items-center justify-center  h-[150px] cursor-pointer ${
+                              tempResult?.dcard_id === dCard?._id
+                                ? "border-2 border-blue-600 shadow-md shadow-gray-500"
+                                : "border-2 hover:border-2 hover:border-blue-600 hover:shadow-md shadow-gray-500 duration-150"
+                            }`}
+                          >
+                            <Image
+                              src={dCard?.thumbnail}
+                              className="w-full object-contain h-full"
+                              alt=""
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
 

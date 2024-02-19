@@ -28,6 +28,15 @@ const templateApi = api.injectEndpoints({
       invalidatesTags: ["templates"],
     }),
 
+    updateTempById: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/templates/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["templates"],
+    }),
+
     // get categories by store used
     getTemplate: builder.query({
       query: (link) => `/templates/${link}/`,
@@ -40,6 +49,7 @@ export const {
   useCreateTemplateMutation,
   useGetTemplateQuery,
   useSendSourceCodeMutation,
+  useUpdateTempByIdMutation,
 
   // tickets
   useIsMatchedTicketMutation,
