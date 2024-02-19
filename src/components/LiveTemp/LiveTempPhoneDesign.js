@@ -22,10 +22,7 @@ const LiveTempPhoneDesign = ({ data }) => {
 
   return (
     <>
-      <div
-        id="print"
-        className="flex justify-center items-center w-full h-fit max-w-[500px] mx-auto mt-8"
-      >
+      <div className="max-w-[500px] mx-auto w-full min-h-screen h-full">
         {digitalCard && digitalCard?.component}
       </div>
     </>
