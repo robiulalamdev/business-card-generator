@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 
 const HomeMain = () => {
   const { isLoading, ticket, isValid } = useTicket();
-  console.log(isLoading, ticket, isValid);
   return (
     <div>
       <Banner />

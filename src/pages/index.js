@@ -1,3 +1,4 @@
+import MainLayout from "@/Layout/MainLayout";
 import HomeMain from "@/components/home/HomeMain";
 import { Inter } from "next/font/google";
 
@@ -10,3 +11,7 @@ export default function Home() {
     </main>
   );
 }
+
+Home.getLayout = function getLayout(page) {
+  return <MainLayout>{page}</MainLayout>;
+};

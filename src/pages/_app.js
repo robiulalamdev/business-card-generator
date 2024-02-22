@@ -6,13 +6,12 @@ import { Provider } from "react-redux";
 import { Toaster } from "sonner";
 
 export default function App({ Component, pageProps }) {
-  return (
+  const getLayout = Component.getLayout ?? ((page) => page);
+  return getLayout(
     <ThemeProvider>
       <Provider store={store}>
         <Toaster position="top-right" />
-        <MainLayout>
-          <Component {...pageProps} />
-        </MainLayout>
+        <Component {...pageProps} />
       </Provider>
     </ThemeProvider>
   );

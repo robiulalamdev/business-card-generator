@@ -25,14 +25,22 @@ import LIveTempFooter from "../LiveTemp/LIveTempFooter";
 import { SpinnerCircularFixed } from "spinners-react";
 import { dcards } from "@/lib/datas/digital-cards";
 import Image from "next/image";
+import TemplateSidebar from "./TemplateSidebar";
 
 const TemplateMain = () => {
   const [sendSourceCode, { isLoading: sourceLoading }] =
     useSendSourceCodeMutation();
   const [updateTempById, { isLoading: updateLoading }] =
     useUpdateTempByIdMutation();
-  const { selectedTmp, generateStep, templateData, html, tempResult, ticket } =
-    useSelector((state) => state.global);
+  const {
+    selectedTmp,
+    generateStep,
+    templateData,
+    html,
+    tempResult,
+    ticket,
+    templateTab,
+  } = useSelector((state) => state.global);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
@@ -48,17 +56,6 @@ const TemplateMain = () => {
     document.body.removeChild(textArea);
   };
 
-  const base64toBlob = (base64Data) => {
-    const byteString = atob(base64Data.split(",")[1]);
-    const mimeString = base64Data.split(",")[0].split(":")[1].split(";")[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: mimeString });
-  };
-
   const handleSourceCode = async () => {
     const options = {
       data: { email: ticket?.email, html: html },
@@ -69,6 +66,20 @@ const TemplateMain = () => {
     } else {
       toast.error("Something went wrong!");
     }
+  };
+
+  const printTemplate = async () => {
+    const element = document.getElementById("print"),
+      canvas = await html2canvas(element),
+      data = canvas.toDataURL("image/jpg"),
+      link = document.createElement("a");
+
+    link.href = data;
+    link.download = "downloaded-image.jpg";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const printBanner = async () => {
@@ -131,29 +142,39 @@ const TemplateMain = () => {
   console.log(tempResult);
   return (
     <>
-      <div className="container h-screen">
-        {isLoading ? (
-          <div className="flex justify-center items-center w-full h-full">
-            <ScaleLoader color="#4A51D3" />
-          </div>
-        ) : (
-          <div className="flex items-start w-full h-full">
-            <div className="mt-32 hidden md:block">
-              <div className="border rounded bg-gray-100 flex justify-center items-center h-[600px] w-[300px] fixed left-10 ">
-                <h1 className="font-semibold text-gray-600">AD Here</h1>
-              </div>
-            </div>
-            <div className="mt-8 pb-5 w-full flex-grow">
+      {isLoading ? (
+        <div className="flex justify-center items-center w-full h-screen">
+          <ScaleLoader color="#4A51D3" />
+        </div>
+      ) : (
+        <div className="flex justify-between w-full bg-purple-50/65">
+          {generateStep === 2 && <TemplateSidebar />}
+
+          <div className="w-full flex-grow h-screen overflow-y-auto">
+            <div className="bg-white my-4 w-fit mx-auto">
               {selectedTmp && generateStep === 1 && (
                 <>{selectedTmp?.tmp_form}</>
               )}
-              {selectedTmp && generateStep === 2 && (
-                <>
-                  <div id="print" className="">
-                    {selectedTmp?.template}
+            </div>
+            {selectedTmp && generateStep === 2 && (
+              <div className="flex flex-col justify-center items-center h-screen">
+                {templateTab === 0 && (
+                  <div className="flex flex-col items-end gap-4">
+                    <div id="print" className="bg-white">
+                      {selectedTmp?.template}
+                    </div>
+                    <Button
+                      onClick={() => printTemplate()}
+                      size="sm"
+                      className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
+                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
+                    >
+                      Download
+                    </Button>
                   </div>
-
-                  <div className="mt-8">
+                )}
+                {templateTab === 1 && (
+                  <div className="flex flex-col items-end gap-4 ">
                     <div
                       id="bannerContainer"
                       className="min-w-[600px] max-w-[600px] min-h-[600px] max-h-[600px] rounded-md bg-orange-600 mx-auto shadow shadow-gray-300 overflow-hidden"
@@ -181,10 +202,19 @@ const TemplateMain = () => {
                         </div>
                       )}
                     </div>
+                    <Button
+                      onClick={() => printBanner()}
+                      size="sm"
+                      className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
+                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
+                    >
+                      Download
+                    </Button>
                   </div>
+                )}
 
-                  <div className="mt-8">
-                    <h1 className="text-center font-bold mb-4">Latter Head</h1>
+                {templateTab === 2 && (
+                  <div className="flex flex-col items-end gap-4 bg-white max-w-[800px] p-5 w-full rounded">
                     <div
                       id="latterHead"
                       className="max-w-[600px] mx-auto bg-purple-100 border-4 rounded-3xl py-4 "
@@ -209,115 +239,102 @@ const TemplateMain = () => {
                         <LIveTempFooter data={tempResult?.template?.footer} />
                       </div>
                     </div>
+                    <Button
+                      onClick={() => printLatterHead()}
+                      size="sm"
+                      className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
+                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
+                    >
+                      Download
+                    </Button>
                   </div>
+                )}
 
-                  <div className="flex justify-center items-center w-full mt-8">
-                    <div id="qrCode" className="p-1">
-                      <QRCode
-                        value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
-                        style={{ height: "150px", width: "150px" }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-8 max-w-[600px] w-full mx-auto border rounded-md p-2 h-fit">
-                    <h1 className="text-left font-bold mb-2">
+                {templateTab === 3 && (
+                  <div className="bg-white p-5 w-full max-w-[800px] rounded">
+                    <h1 className="text-left font-bold mb-2 text-black">
                       Choose Digital Card
                     </h1>
-                    <div className="w-full ">
-                      <div className="p-1 grid grid-cols-3 gap-4">
-                        {dcards.map((dCard, index) => (
-                          <div
-                            onClick={() => handleChooseDcard(dCard?._id)}
-                            key={index}
-                            className={`flex items-center justify-center  h-[150px] cursor-pointer ${
-                              tempResult?.dcard_id === dCard?._id
-                                ? "border-2 border-blue-600 shadow-md shadow-gray-500"
-                                : "border-2 hover:border-2 hover:border-blue-600 hover:shadow-md shadow-gray-500 duration-150"
-                            }`}
-                          >
-                            <Image
-                              src={dCard?.thumbnail}
-                              className="w-full object-contain h-full"
-                              alt=""
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-8">
-                    {tempResult?.template_link && (
-                      <div className="flex justify-center items-center gap-4 mt-4">
-                        <div className="text-xs min-h-[40px] w-fit max-w-[800px] bg-black text-gray-300 px-2 flex items-center rounded">
-                          {`${CLIENT_URL}/temps/${tempResult?.template_link}`}
-                        </div>
-                        <Button
-                          onClick={() =>
-                            copyToClipboard(
-                              `${CLIENT_URL}/temps/${tempResult?.template_link}`
-                            )
-                          }
-                          className="bg-primary h-10 w-14 flex justify-center items-center shadow-none hover:shadow-none text-white text-xs rounded"
+                    <div className="w-full h-fit grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      {dcards.map((dCard, index) => (
+                        <div
+                          onClick={() => handleChooseDcard(dCard?._id)}
+                          key={index}
+                          className={`flex items-center justify-center  h-[150px] cursor-pointer ${
+                            tempResult?.dcard_id === dCard?._id
+                              ? "border-2 border-blue-600 shadow-md shadow-gray-500"
+                              : "border-2 hover:border-2 hover:border-blue-600 hover:shadow-md shadow-gray-500 duration-150"
+                          }`}
                         >
-                          <small>Copy</small>
+                          <Image
+                            src={dCard?.thumbnail}
+                            className="w-full object-contain h-full"
+                            alt=""
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex flex-col items-center gap-4 mt-8">
+                      <div id="qrCode" className="p-1">
+                        <QRCode
+                          value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
+                          style={{ height: "150px", width: "150px" }}
+                        />
+                      </div>
+                      <Button
+                        onClick={() => downloadQRCode()}
+                        size="sm"
+                        className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
+                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
+                      >
+                        Download
+                      </Button>
+                    </div>
+
+                    <div className="mt-8">
+                      {tempResult?.template_link && (
+                        <div className="flex justify-center items-center gap-4 mt-4">
+                          <div className="text-xs min-h-[40px] w-fit max-w-[800px] bg-black text-gray-300 px-2 flex items-center rounded">
+                            {`${CLIENT_URL}/temps/${tempResult?.template_link}`}
+                          </div>
+                          <Button
+                            onClick={() =>
+                              copyToClipboard(
+                                `${CLIENT_URL}/temps/${tempResult?.template_link}`
+                              )
+                            }
+                            className="bg-primary h-10 w-14 flex justify-center items-center shadow-none hover:shadow-none text-white text-xs rounded"
+                          >
+                            <small>Copy</small>
+                          </Button>
+                        </div>
+                      )}
+                      <div className="flex justify-center items-center gap-4 mt-4">
+                        <Button
+                          onClick={() => handleSourceCode()}
+                          size="sm"
+                          className="rounded-sm shadow-none hover:shadow-none h-8 text-white bg-blue-600 flex justify-center items-center gap-3"
+                        >
+                          {sourceLoading && (
+                            <SpinnerCircularFixed
+                              size={22}
+                              thickness={150}
+                              speed={450}
+                              color="white"
+                              secondaryColor="gray"
+                            />
+                          )}
+                          Get Source Code
                         </Button>
                       </div>
-                    )}
-                    <div className="flex justify-center items-center gap-4 mt-4">
-                      <Button
-                        onClick={printLatterHead}
-                        size="sm"
-                        className="rounded-sm shadow-none hover:shadow-none h-8  bg-purple-600 text-xs text-current text-white"
-                      >
-                        Download Latter Head
-                      </Button>
-                      <Button
-                        onClick={downloadQRCode}
-                        size="sm"
-                        className="rounded-sm shadow-none hover:shadow-none h-8  bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
-                      >
-                        Download QRCode
-                      </Button>
-                      <Button
-                        onClick={() => printBanner()}
-                        size="sm"
-                        className="rounded-sm shadow-none hover:shadow-none h-8  bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
-                      >
-                        Download Banner
-                      </Button>
-                      <Button
-                        onClick={() => handleSourceCode()}
-                        size="sm"
-                        className="rounded-sm shadow-none hover:shadow-none h-8 text-white bg-blue-600 flex justify-center items-center gap-3"
-                      >
-                        {sourceLoading && (
-                          <SpinnerCircularFixed
-                            size={22}
-                            thickness={150}
-                            speed={450}
-                            color="white"
-                            secondaryColor="gray"
-                          />
-                        )}
-                        Get Source Code
-                      </Button>
                     </div>
                   </div>
-                </>
-              )}
-            </div>
-            <div className="mt-32 hidden md:block">
-              <div className="border rounded bg-gray-100 flex justify-center items-center h-[600px] w-[300px]  fixed right-10 ">
-                <h1 className="font-semibold text-gray-600">AD Here</h1>
+                )}
               </div>
-            </div>
+            )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 };

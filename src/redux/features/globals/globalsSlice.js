@@ -9,6 +9,7 @@ const initialState = {
   generateStep: 1,
   tempResult: null,
   liveTempData: null,
+  templateTab: 0,
 };
 
 const globalsSlice = createSlice({
@@ -37,8 +38,10 @@ const globalsSlice = createSlice({
       state.templateSmallData = action.payload;
     },
     setLiveTempData: (state, action) => {
-      console.log(action.payload);
       state.liveTempData = action.payload;
+    },
+    setTemplateTab: (state, action) => {
+      state.templateTab = action.payload;
     },
   },
 });
@@ -52,6 +55,7 @@ export const {
   setTempResult,
   setTemplateSmallData,
   setLiveTempData,
+  setTemplateTab,
 } = globalsSlice.actions;
 
 export default globalsSlice.reducer;

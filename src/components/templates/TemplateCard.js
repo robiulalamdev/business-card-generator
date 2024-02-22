@@ -13,10 +13,15 @@ const TemplateCard = ({ template }) => {
   };
   return (
     // <Link href={`/templates/${template?._id}`}>
-    <div className="w-full h-full group hover:-translate-y-5 duration-300 cursor-pointer hover:border hover:border-primary">
+    <div
+      className="w-full h-full group hover:-translate-y-5 duration-300 cursor-pointer hover:border hover:border-primary bg-white"
+      style={{
+        boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+      }}
+    >
       <Image
         onClick={() => handleGetData()}
-        className="w-full border"
+        className="w-full border h-full object-contain"
         src={template.img}
         alt=""
       />

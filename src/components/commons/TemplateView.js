@@ -5,10 +5,9 @@ const TemplateView = () => {
   const { html } = useSelector((state) => state.global);
   return (
     <iframe
-      id="print"
       style={{
-        height: "300px",
-        width: "520px",
+        height: "400px",
+        width: "600px",
         margin: "0 auto",
       }}
       srcDoc={html}
