@@ -10,36 +10,38 @@ const Card2 = () => {
   return (
     <div className="bg-white h-full pb-4 border-4 ">
       <div className="relative h-[200px]">
-        <div className="rounded-t-md overflow-hidden max-h-[200px] border-b-2">
+        <div className="rounded-t-md overflow-hidden max-h-[250px] border-b-2">
           <img
             src="https://t4.ftcdn.net/jpg/05/31/79/69/360_F_531796938_Gww8GsUSycc78QiaR5seCzl9RW1gr6vU.jpg"
             alt="image"
-            className="object-cover w-full h-full min-h-[200px]"
+            className="object-cover w-full h-full min-h-[250px]"
           />
         </div>
-        <div className="absolute -bottom-16 w-full flex justify-center items-center">
+        <div className="absolute -bottom-32 w-full flex justify-center items-center">
           <img
             src={liveTempData?.template?.logo}
             alt=""
-            className="h-[120px] w-[120px] object-cover rounded-full border-2 border-white"
+            className="h-[160px] w-[160px] object-cover rounded-full border-2 border-white"
           />
         </div>
       </div>
-      <div className="mt-20">
-        <h1 className="text-center font-extrabold font-inter text-black">
+      <div className="mt-36">
+        <h1 className="text-center font-extrabold font-inter text-black text-xl">
           {liveTempData?.template?.name}
         </h1>
         <p className="text-center text-sm font-semibold font-inter text-black">
           {liveTempData?.template?.designation}
         </p>
       </div>
-      <div className="grid grid-cols-1 gap-3 mt-8 ml-6 md:ml-20">
+      <div className="grid grid-cols-1 gap-3 mt-8 ml-6 md:ml-16">
         <a
           href={`tel:+${liveTempData?.template?.phone}`}
           target="_blank"
           className="flex items-center gap-2 text-black font-semibold text-sm h-fit"
         >
-          <div className="text-black">{iPhone}</div>
+          <div className="text-white bg-black w-[35px] h-[35px] rounded-full p-1 flex justify-center items-center">
+            {iPhone}
+          </div>
           <p>+{liveTempData?.template?.phone}</p>
         </a>
 
@@ -48,7 +50,9 @@ const Card2 = () => {
           target="_blank"
           className="flex items-center gap-2 text-black font-semibold text-sm h-fit"
         >
-          <div className="text-black">{iMail}</div>
+          <div className="text-white bg-black w-[35px] h-[35px] rounded-full p-1 flex justify-center items-center">
+            {iMail}
+          </div>
           <p>{liveTempData?.template?.email}</p>
         </a>
 
@@ -57,17 +61,21 @@ const Card2 = () => {
           target="_blank"
           className="flex items-center gap-2 text-black font-semibold text-sm h-fit"
         >
-          <div className="text-black">{iWeb}</div>
+          <div className="text-white bg-black w-[35px] h-[35px] rounded-full p-1 flex justify-center items-center">
+            {iWeb}
+          </div>
           <p>{liveTempData?.template?.website}</p>
         </a>
 
         <p className="flex items-center gap-2 text-black font-semibold text-sm h-fit">
-          <div className="text-black">{iLocation}</div>
+          <div className="text-white bg-black w-[35px] h-[35px] rounded-full p-1 flex justify-center items-center">
+            {iLocation}
+          </div>
           <p>{liveTempData?.template?.address}</p>
         </p>
       </div>
 
-      <div className="flex flex-col justify-center items-center w-full mt-8">
+      <div className="flex flex-col justify-center items-center w-full mt-16">
         <h1 className="text-center font-semibold text-black">Scan Me</h1>
         <div id="qrCode" className="p-1 bg-white">
           <QRCode

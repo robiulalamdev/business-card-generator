@@ -26,6 +26,7 @@ import { SpinnerCircularFixed } from "spinners-react";
 import { dcards } from "@/lib/datas/digital-cards";
 import Image from "next/image";
 import TemplateSidebar from "./TemplateSidebar";
+import { useReactToPrint } from "react-to-print";
 
 const TemplateMain = () => {
   const [sendSourceCode, { isLoading: sourceLoading }] =
@@ -57,16 +58,25 @@ const TemplateMain = () => {
   };
 
   const handleSourceCode = async () => {
-    const options = {
-      data: { email: ticket?.email, html: html },
-    };
-    const result = await sendSourceCode(options);
-    if (result?.data?.success) {
-      toast.success("Source Code send to email");
-    } else {
-      toast.error("Something went wrong!");
-    }
+    var iframe = document.getElementById("print");
+    html2canvas(iframe.contentDocument.body).then(async function (canvas) {
+      var dataURL = canvas.toDataURL();
+      const options = {
+        data: { email: ticket?.email, html: html, temp_img: dataURL },
+      };
+      const result = await sendSourceCode(options);
+      if (result?.data?.success) {
+        toast.success("Source Code send to email");
+      } else {
+        toast.error("Something went wrong!");
+      }
+    });
   };
+
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   const printTemplate = async () => {
     const element = document.getElementById("print"),
@@ -160,11 +170,11 @@ const TemplateMain = () => {
               <div className="flex flex-col justify-center items-center h-screen">
                 {templateTab === 0 && (
                   <div className="flex flex-col items-end gap-4">
-                    <div id="print" className="bg-white">
+                    <div ref={componentRef} className="bg-white">
                       {selectedTmp?.template}
                     </div>
                     <Button
-                      onClick={() => printTemplate()}
+                      onClick={() => handlePrint()}
                       size="sm"
                       className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
                   hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
@@ -251,84 +261,98 @@ const TemplateMain = () => {
                 )}
 
                 {templateTab === 3 && (
-                  <div className="bg-white p-5 w-full max-w-[800px] rounded">
-                    <h1 className="text-left font-bold mb-2 text-black">
-                      Choose Digital Card
-                    </h1>
-                    <div className="w-full h-fit grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-                      {dcards.map((dCard, index) => (
-                        <div
-                          onClick={() => handleChooseDcard(dCard?._id)}
-                          key={index}
-                          className={`flex items-center justify-center  h-[150px] cursor-pointer ${
-                            tempResult?.dcard_id === dCard?._id
-                              ? "border-2 border-blue-600 shadow-md shadow-gray-500"
-                              : "border-2 hover:border-2 hover:border-blue-600 hover:shadow-md shadow-gray-500 duration-150"
-                          }`}
-                        >
-                          <Image
-                            src={dCard?.thumbnail}
-                            className="w-full object-contain h-full"
-                            alt=""
+                  <>
+                    <div className="opacity-0 absolute z-10">
+                      <iframe
+                        id="print"
+                        style={{
+                          height: "400px",
+                          width: "600px",
+                          margin: "0 auto",
+                        }}
+                        srcDoc={html}
+                      ></iframe>
+                    </div>
+                    <div className="bg-white p-5 w-full max-w-[800px] rounded z-50">
+                      <h1 className="text-left font-bold mb-2 text-black">
+                        Choose Digital Card
+                      </h1>
+                      <div className="w-full h-fit grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {dcards.map((dCard, index) => (
+                          <div
+                            onClick={() => handleChooseDcard(dCard?._id)}
+                            key={index}
+                            className={`flex items-center justify-center  h-[150px] cursor-pointer ${
+                              tempResult?.dcard_id === dCard?._id
+                                ? "border-2 border-blue-600 shadow-md shadow-gray-500"
+                                : "border-2 hover:border-2 hover:border-blue-600 hover:shadow-md shadow-gray-500 duration-150"
+                            }`}
+                          >
+                            <Image
+                              src={dCard?.thumbnail}
+                              className="w-full object-contain h-full"
+                              alt=""
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex flex-col items-center gap-4 mt-8">
+                        <div id="qrCode" className="p-1">
+                          <QRCode
+                            value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
+                            style={{ height: "150px", width: "150px" }}
                           />
                         </div>
-                      ))}
-                    </div>
-                    <div className="flex flex-col items-center gap-4 mt-8">
-                      <div id="qrCode" className="p-1">
-                        <QRCode
-                          value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
-                          style={{ height: "150px", width: "150px" }}
-                        />
-                      </div>
-                      <Button
-                        onClick={() => downloadQRCode()}
-                        size="sm"
-                        className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
-                      >
-                        Download
-                      </Button>
-                    </div>
-
-                    <div className="mt-8">
-                      {tempResult?.template_link && (
-                        <div className="flex justify-center items-center gap-4 mt-4">
-                          <div className="text-xs min-h-[40px] w-fit max-w-[800px] bg-black text-gray-300 px-2 flex items-center rounded">
-                            {`${CLIENT_URL}/temps/${tempResult?.template_link}`}
-                          </div>
-                          <Button
-                            onClick={() =>
-                              copyToClipboard(
-                                `${CLIENT_URL}/temps/${tempResult?.template_link}`
-                              )
-                            }
-                            className="bg-primary h-10 w-14 flex justify-center items-center shadow-none hover:shadow-none text-white text-xs rounded"
-                          >
-                            <small>Copy</small>
-                          </Button>
-                        </div>
-                      )}
-                      <div className="flex justify-center items-center gap-4 mt-4">
                         <Button
-                          onClick={() => handleSourceCode()}
+                          onClick={() => downloadQRCode()}
                           size="sm"
-                          className="rounded-sm shadow-none hover:shadow-none h-8 text-white bg-blue-600 flex justify-center items-center gap-3"
+                          className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
+                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
                         >
-                          {sourceLoading && (
-                            <SpinnerCircularFixed
-                              size={22}
-                              thickness={150}
-                              speed={450}
-                              color="white"
-                              secondaryColor="gray"
-                            />
-                          )}
-                          Get Source Code
+                          Download
                         </Button>
                       </div>
+
+                      <div className="mt-8">
+                        {tempResult?.template_link && (
+                          <div className="flex justify-center items-center gap-4 mt-4">
+                            <div className="text-xs min-h-[40px] w-fit max-w-[800px] bg-black text-gray-300 px-2 flex items-center rounded">
+                              {`${CLIENT_URL}/temps/${tempResult?.template_link}`}
+                            </div>
+                            <Button
+                              onClick={() =>
+                                copyToClipboard(
+                                  `${CLIENT_URL}/temps/${tempResult?.template_link}`
+                                )
+                              }
+                              className="bg-primary h-10 w-14 flex justify-center items-center shadow-none hover:shadow-none text-white text-xs rounded"
+                            >
+                              <small>Copy</small>
+                            </Button>
+                          </div>
+                        )}
+
+                        <div className="flex justify-center items-center gap-4 mt-4">
+                          <Button
+                            onClick={() => handleSourceCode()}
+                            size="sm"
+                            className="rounded-sm shadow-none hover:shadow-none h-8 text-white bg-blue-600 flex justify-center items-center gap-3"
+                          >
+                            {sourceLoading && (
+                              <SpinnerCircularFixed
+                                size={22}
+                                thickness={150}
+                                speed={450}
+                                color="white"
+                                secondaryColor="gray"
+                              />
+                            )}
+                            Get Source Code
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
             )}
