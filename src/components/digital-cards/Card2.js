@@ -8,7 +8,7 @@ import { iLocation, iMail, iPhone, iWeb } from "@/lib/icons/icons";
 const Card2 = () => {
   const { liveTempData } = useSelector((state) => state.global);
   return (
-    <div className="bg-white h-full pb-4 border-4 ">
+    <div className="bg-white h-full pb-4 border-4 overflow-y-auto">
       <div className="relative h-[200px]">
         <div className="rounded-t-md overflow-hidden max-h-[250px] border-b-2">
           <img
