@@ -1,18 +1,22 @@
-import { iMenu } from "@/lib/icons/icons";
-import { IconButton } from "@material-tailwind/react";
-import React from "react";
-
+import Image from "next/image";
+import React, { useContext } from "react";
+import logo from "../../assets/brand/logo.png";
+import { AuthContext } from "../context/AuthContext";
 const Header = () => {
+  const { user, logout } = useContext(AuthContext);
+  console.log(user);
   return (
-    <div className="h-[80px] w-full bg-primary shadow-sm shadow-gray-900">
-      <div className="container h-full w-full  text-white flex justify-between items-center">
-        <h1 className="text-white text-base font-semibold uppercase leading-[22px]">
-          Business Card Generator
-        </h1>
-        <IconButton size="sm" className="bg-transparent">
-          {iMenu}
-        </IconButton>
-      </div>
+    <div className="container flex justify-between items-center py-3 bg-white">
+      <span></span>
+      <Image src={logo} alt="logo" className="max-w-[120px] object-contain" />
+      {user && user?._id && (
+        <button
+          onClick={() => logout()}
+          className="shadow-none hover:shadow-none rounded bg-red-600 text-current w-[100px] h-8 text-white text-sm p-0"
+        >
+          Log out
+        </button>
+      )}
     </div>
   );
 };

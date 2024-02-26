@@ -2,100 +2,68 @@ import {
   useCreateTicketMutation,
   useGetTicketsQuery,
 } from "@/redux/features/ticket/ticketApi";
-import { Button } from "@material-tailwind/react";
-import React from "react";
+import { Button, Spinner } from "@material-tailwind/react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { SpinnerCircularFixed } from "spinners-react";
 import randomstring from "randomstring";
 import useInputPattern from "@/lib/hooks/useInputPattern";
+import LoginPopup from "@/components/shared/LoginPopup";
+import DashboardLayout from "@/Layout/DashboardLayout";
+import { AuthContext } from "@/components/context/AuthContext";
+import CreateTicketPopup from "@/components/dashboard/CreateTicketPopup";
+import Tickets from "@/components/dashboard/Tickets";
 
 const DashboardHome = () => {
-  const [createTicket, { isLoading }] = useCreateTicketMutation();
-  const { data } = useGetTicketsQuery();
-  const { handleSubmit, register, setValue, reset } = useForm();
-  const { handleNumber } = useInputPattern();
+  const { user, refetch, isLoading } = useContext(AuthContext);
+  const {
+    data,
+    isLoading: ticketLoading,
+    refetch: ticketRefetch,
+  } = useGetTicketsQuery();
+  const [open, setOpen] = useState(false);
 
-  const handleSave = async (data) => {
-    const options = {
-      data: data,
-    };
-    const result = await createTicket(options);
-    if (result?.data?.success) {
-      toast.success("Data Save Success!");
-      reset();
-    } else {
-      toast.error("Data Save Failed!");
-    }
-  };
-
-  const handleGenerateCode = async () => {
-    const code = await randomstring.generate({ length: 5, charset: "numeric" });
-    setValue("code", code);
-  };
   //   console.log(data);
-  return (
-    <main className=" w-full h-screen flex justify-center items-center">
-      <form
-        onSubmit={handleSubmit(handleSave)}
-        className="max-w-[400px] w-full mx-auto bg-white h-fit px-3 py-5 rounded-md shadow border"
-      >
-        <div className="mb-4">
-          <span className="block tracking-[0.26px] leading-[16px] text-black text-sm mb-1">
-            Email
-          </span>
-          <input
-            {...register("email", { required: true })}
-            type="email"
-            className="w-full h-10 bg-gray-100 outline-none px-2 rounded text-sm"
-            placeholder="Enter Email"
-            required
-          />
-        </div>
-        <div className="grid grid-cols-3 items-end gap-4">
-          <div className="col-span-2">
-            <span className="block tracking-[0.26px] leading-[16px] text-black text-sm mb-1">
-              Code
-            </span>
-            <input
-              {...register("code", { required: true })}
-              type="number"
-              onInput={handleNumber}
-              className="w-full h-10 bg-gray-100 outline-none px-2 rounded text-sm"
-              placeholder="Enter Code"
-              required
-            />
-          </div>
-          <Button
-            onClick={() => handleGenerateCode()}
-            type="button"
-            className="h-10 w-full bg-blue-600  text-current text-white rounded hover:shadow-none shadow-none"
-          >
-            Generate
-          </Button>
-        </div>
 
-        <div className="mt-5 col-span-4">
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="flex justify-center items-center gap-2 max-w-[180px] w-full h-10 shadow-none hover:shadow-none rounded bg-primary"
-          >
-            {isLoading && (
-              <SpinnerCircularFixed
-                size={25}
-                thickness={150}
-                speed={450}
-                color="white"
-                secondaryColor="gray"
+  if (isLoading) {
+    return (
+      <div className="w-full min-h-screen h-full flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
+  }
+  return (
+    <>
+      <main className="h-full bg-teal-50/50 w-full">
+        {!isLoading && user?._id ? (
+          <div className="container pb-4">
+            <div className="py-3 flex items-center gap-4">
+              <input
+                type="search"
+                className="w-full max-w-[400px] h-10 outline-none border border-blue-gray-600 rounded bg-blue-gray-100 px-2 text-sm text-black placeholder:text-blue-gray-600 placeholder:text-sm"
+                placeholder="Search Tickets"
               />
-            )}
-            Submit
-          </Button>
-        </div>
-      </form>
-    </main>
+              <button
+                onClick={() => setOpen(true)}
+                className="shadow-none hover:shadow-none rounded bg-orange-700 text-current w-[100px] h-10 text-white text-sm p-0"
+              >
+                New Ticket
+              </button>
+            </div>
+            <Tickets tickets={data?.data} isLoading={ticketLoading} />
+            <CreateTicketPopup open={open} close={setOpen} />
+          </div>
+        ) : (
+          <LoginPopup open={true} />
+        )}
+      </main>
+    </>
   );
 };
 
 export default DashboardHome;
+
+DashboardHome.getLayout = function getLayout(page) {
+  return <DashboardLayout>{page}</DashboardLayout>;
+};

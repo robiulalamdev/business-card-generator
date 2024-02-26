@@ -1,4 +1,4 @@
-import MainLayout from "@/Layout/MainLayout";
+import AuthProvider from "@/components/context/AuthContext";
 import store from "@/redux/store";
 import "@/styles/globals.css";
 import { ThemeProvider } from "@material-tailwind/react";
@@ -7,11 +7,13 @@ import { Toaster } from "sonner";
 
 export default function App({ Component, pageProps }) {
   const getLayout = Component.getLayout ?? ((page) => page);
-  return getLayout(
+  return (
     <ThemeProvider>
       <Provider store={store}>
-        <Toaster position="top-right" />
-        <Component {...pageProps} />
+        <AuthProvider>
+          <Toaster position="top-right" />
+          {getLayout(<Component {...pageProps} />)}
+        </AuthProvider>
       </Provider>
     </ThemeProvider>
   );
