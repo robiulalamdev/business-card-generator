@@ -1,3 +1,6 @@
+import { TICKET_TOKEN_NAME } from "@/lib/global";
+import { generateToken } from "@/lib/globalServices";
+import { iAlert } from "@/lib/icons/icons";
 import { setTicket } from "@/redux/features/globals/globalsSlice";
 import { useIsMatchedTicketMutation } from "@/redux/features/template/templateApi";
 import { Button } from "@material-tailwind/react";
@@ -10,7 +13,6 @@ import { SpinnerCircularFixed } from "spinners-react";
 
 const TicketForm = () => {
   const router = useRouter();
-  const { id } = router.query;
   const [errorResult, setErrorResult] = useState("");
   const [isMatchedTicket, { isLoading }] = useIsMatchedTicketMutation();
   const {
@@ -23,14 +25,13 @@ const TicketForm = () => {
   const handleSave = async (data) => {
     const options = {
       data: data,
-      id: id,
     };
     const result = await isMatchedTicket(options);
     if (result?.data?.success) {
       if (result?.data?.valid) {
-        dispatch(setTicket(result?.data?.data));
-
         toast.success("Ticket Verification Success!");
+        localStorage.setItem(TICKET_TOKEN_NAME, result?.data?.token);
+        dispatch(setTicket(result?.data?.data));
       } else {
         setErrorResult("Ticket Credentials Not Valid");
         toast.error("Ticket Credentials Not Valid");

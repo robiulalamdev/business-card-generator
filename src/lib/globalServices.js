@@ -1,3 +1,6 @@
+import { JWT_TOKEN } from "./global";
+const jwt = require("jsonwebtoken");
+
 export const handleTmpUrl = async () => {
   const element = document.getElementById("print");
 
@@ -38,3 +41,15 @@ export const downloadStringImage = (imageData, fileName) => {
   document.body.removeChild(a);
   window.URL.revokeObjectURL(url);
 };
+
+export const generateToken = async (email, code) => {
+  const secret = JWT_TOKEN;
+  const token = jwt.sign({ email, code }, secret, { expiresIn: "365d" });
+  return token;
+};
+
+export function decodeToken(token) {
+  const secret = JWT_TOKEN;
+  const decoded = jwt.verify(token, secret);
+  return decoded;
+}

@@ -12,8 +12,8 @@ const templateApi = api.injectEndpoints({
     }),
 
     isMatchedTicket: builder.mutation({
-      query: ({ data, id }) => ({
-        url: `/tickets/isMatched/${id}`,
+      query: ({ data }) => ({
+        url: `/tickets/isMatched`,
         method: "POST",
         body: data,
       }),

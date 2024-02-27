@@ -2,7 +2,6 @@ import React from "react";
 import TicketCard from "./TicketCard";
 
 const Tickets = ({ tickets, isLoading }) => {
-  console.log(tickets);
   return (
     <>
       {tickets?.length > 0 ? (

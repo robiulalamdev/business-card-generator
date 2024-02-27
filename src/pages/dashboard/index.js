@@ -3,7 +3,7 @@ import {
   useGetTicketsQuery,
 } from "@/redux/features/ticket/ticketApi";
 import { Button, Spinner } from "@material-tailwind/react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { SpinnerCircularFixed } from "spinners-react";
@@ -22,9 +22,27 @@ const DashboardHome = () => {
     isLoading: ticketLoading,
     refetch: ticketRefetch,
   } = useGetTicketsQuery();
+  const [tickets, setTickets] = useState([]);
   const [open, setOpen] = useState(false);
 
   //   console.log(data);
+
+  useMemo(() => {
+    if (data?.data?.length > 0) {
+      setTickets(data?.data);
+    }
+  }, [data]);
+
+  const searchTicket = async (value) => {
+    if (value) {
+      const result = data?.data?.filter((ticket) =>
+        ticket?.email.toLowerCase().includes(value.toLowerCase())
+      );
+      setTickets(result);
+    } else {
+      setTickets(data?.data);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -35,11 +53,12 @@ const DashboardHome = () => {
   }
   return (
     <>
-      <main className="h-full bg-teal-50/50 w-full">
+      <main className="h-full bg-teal-50/50 w-full overflow-y-auto">
         {!isLoading && user?._id ? (
           <div className="container pb-4">
             <div className="py-3 flex items-center gap-4">
               <input
+                onChange={(e) => searchTicket(e.target.value)}
                 type="search"
                 className="w-full max-w-[400px] h-10 outline-none border border-blue-gray-600 rounded bg-blue-gray-100 px-2 text-sm text-black placeholder:text-blue-gray-600 placeholder:text-sm"
                 placeholder="Search Tickets"
@@ -51,7 +70,7 @@ const DashboardHome = () => {
                 New Ticket
               </button>
             </div>
-            <Tickets tickets={data?.data} isLoading={ticketLoading} />
+            <Tickets tickets={tickets} isLoading={ticketLoading} />
             <CreateTicketPopup open={open} close={setOpen} />
           </div>
         ) : (

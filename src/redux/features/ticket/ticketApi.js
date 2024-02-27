@@ -11,6 +11,15 @@ const ticketApi = api.injectEndpoints({
       invalidatesTags: ["tickets"],
     }),
 
+    removeTicket: builder.mutation({
+      query: ({ id }) => ({
+        url: `/tickets/${id}`,
+        method: "DELETE",
+        body: {},
+      }),
+      invalidatesTags: ["tickets"],
+    }),
+
     getTickets: builder.query({
       query: () => `/tickets`,
       providesTags: ["tickets"],
@@ -20,6 +29,11 @@ const ticketApi = api.injectEndpoints({
       query: (id) => `/tickets/${id}`,
       providesTags: ["tickets"],
     }),
+
+    getTicketByToken: builder.query({
+      query: (token) => `/tickets/ticket-info/${token}`,
+      providesTags: ["tickets"],
+    }),
   }),
 });
 
@@ -27,4 +41,6 @@ export const {
   useCreateTicketMutation,
   useGetTicketsQuery,
   useGetTicketByIdQuery,
+  useRemoveTicketMutation,
+  useGetTicketByTokenQuery,
 } = ticketApi;

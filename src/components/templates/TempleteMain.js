@@ -27,6 +27,7 @@ import { dcards } from "@/lib/datas/digital-cards";
 import Image from "next/image";
 import TemplateSidebar from "./TemplateSidebar";
 import { useReactToPrint } from "react-to-print";
+import LetterHead from "../template_preview/LetterHead";
 
 const TemplateMain = () => {
   const [sendSourceCode, { isLoading: sourceLoading }] =
@@ -78,20 +79,6 @@ const TemplateMain = () => {
     content: () => componentRef.current,
   });
 
-  const printTemplate = async () => {
-    const element = document.getElementById("print"),
-      canvas = await html2canvas(element),
-      data = canvas.toDataURL("image/jpg"),
-      link = document.createElement("a");
-
-    link.href = data;
-    link.download = "downloaded-image.jpg";
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const printBanner = async () => {
     const element = document.getElementById("bannerContainer"),
       canvas = await html2canvas(element),
@@ -120,20 +107,6 @@ const TemplateMain = () => {
     document.body.removeChild(link);
   };
 
-  const printLatterHead = async () => {
-    const element = document.getElementById("latterHead"),
-      canvas = await html2canvas(element),
-      data = canvas.toDataURL("image/jpg"),
-      link = document.createElement("a");
-
-    link.href = data;
-    link.download = "downloaded-image.jpg";
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const handleChooseDcard = async (id) => {
     let { dcard_id, ...other } = tempResult;
     const options = {
@@ -149,7 +122,7 @@ const TemplateMain = () => {
     }
   };
 
-  console.log(tempResult);
+  // console.log(tempResult);
   return (
     <>
       {isLoading ? (
@@ -223,42 +196,7 @@ const TemplateMain = () => {
                   </div>
                 )}
 
-                {templateTab === 2 && (
-                  <div className="flex flex-col items-end gap-4 bg-white max-w-[800px] p-5 w-full rounded">
-                    <div
-                      id="latterHead"
-                      className="max-w-[600px] mx-auto bg-purple-100 border-4 rounded-3xl py-4 "
-                    >
-                      <div className="flex justify-center items-center">
-                        <img
-                          src={tempResult?.template?.logo}
-                          alt=""
-                          className="h-[80px] w-[80px] object-cover rounded-full"
-                        />
-                      </div>
-
-                      <div className="mt-44 flex items-center justify-center gap-4 px-4">
-                        <a
-                          href={`tel:+${tempResult?.template?.footer?.contact_no}`}
-                          target="_blank"
-                        >
-                          <p className="font-bold hover:text-blue-600">
-                            +{tempResult?.template?.footer?.contact_no}
-                          </p>
-                        </a>
-                        <LIveTempFooter data={tempResult?.template?.footer} />
-                      </div>
-                    </div>
-                    <Button
-                      onClick={() => printLatterHead()}
-                      size="sm"
-                      className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
-                    >
-                      Download
-                    </Button>
-                  </div>
-                )}
+                {templateTab === 2 && <LetterHead data={tempResult} />}
 
                 {templateTab === 3 && (
                   <>

@@ -14,7 +14,14 @@ const CreateTicketPopup = ({ open, close }) => {
   const [createTicket, { isLoading: ticketLoading }] =
     useCreateTicketMutation();
   const { data } = useGetTicketsQuery();
-  const { handleSubmit, register, setValue, reset } = useForm();
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm();
   const { handleNumber } = useInputPattern();
 
   const handleSave = async (data) => {
@@ -25,8 +32,17 @@ const CreateTicketPopup = ({ open, close }) => {
     if (result?.data?.success) {
       toast.success("Data Save Success!");
       reset();
+      close(false);
     } else {
-      toast.error("Data Save Failed!");
+      if (result?.data?.type === "Email") {
+        setError("email", {
+          type: "manual",
+          message: "Email Already in use",
+        });
+        toast.error("Email already in use");
+      } else {
+        toast.error("Data Save Failed!");
+      }
     }
   };
 
@@ -51,6 +67,11 @@ const CreateTicketPopup = ({ open, close }) => {
             placeholder="Enter Email"
             required
           />
+          {errors.email && (
+            <small className="text-red-500 text-xs italic block">
+              {errors.email.message}
+            </small>
+          )}
         </div>
         <div className="grid grid-cols-3 items-end gap-4">
           <div className="col-span-2">

@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { temp1Html } from "@/lib/datas/generateHtml/temp1";
 
 const Template1Form = () => {
-  const { selectedTmp, generateStep, templateData } = useSelector(
+  const { selectedTmp, generateStep, templateData, ticket } = useSelector(
     (state) => state.global
   );
   const { handlePhoneNumberInput, handleNumber } = useInputPattern();
@@ -65,7 +65,7 @@ const Template1Form = () => {
 
   const handleSave = async () => {
     const options = {
-      data: { template: templateData, template_no: 1 },
+      data: { template: templateData, template_no: 1, email: ticket?.email },
     };
     const result = await createTemplate(options);
     if (result?.data?.success) {
