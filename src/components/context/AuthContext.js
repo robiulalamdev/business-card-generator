@@ -9,10 +9,7 @@ import {
   setTempResult,
   setTicket,
 } from "@/redux/features/globals/globalsSlice";
-import {
-  useGetTicketByIdQuery,
-  useGetTicketByTokenQuery,
-} from "@/redux/features/ticket/ticketApi";
+import { useGetTicketByTokenQuery } from "@/redux/features/ticket/ticketApi";
 import { useUserQuery } from "@/redux/features/user/userApi";
 import React, { createContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -84,6 +81,7 @@ export function AuthProvider({ children }) {
     refetch,
     isLoading,
     logout,
+    ticketLoading,
   };
 
   return (

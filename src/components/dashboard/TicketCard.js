@@ -2,15 +2,52 @@ import React from "react";
 import logo from "../../assets/brand/logo.png";
 import Image from "next/image";
 import QRCode from "react-qr-code";
-import { CLIENT_URL } from "@/lib/global";
+import { CLIENT_URL, TICKET_TOKEN_NAME } from "@/lib/global";
 import moment from "moment";
 import Link from "next/link";
 import { iTrash, iView } from "@/lib/icons/icons";
 import { useRemoveTicketMutation } from "@/redux/features/ticket/ticketApi";
 import { toast } from "sonner";
+import { useIsMatchedTicketMutation } from "@/redux/features/template/templateApi";
+import { useDispatch } from "react-redux";
+import {
+  setSelectedTmp,
+  setTempResult,
+  setTemplateData,
+  setTicket,
+} from "@/redux/features/globals/globalsSlice";
+import { useRouter } from "next/router";
 
 const TicketCard = ({ ticket }) => {
   const [removeTicket, { isLoading }] = useRemoveTicketMutation();
+  const [isMatchedTicket, { ticketMatchIsLoading }] =
+    useIsMatchedTicketMutation();
+
+  const router = useRouter();
+
+  const dispatch = useDispatch();
+
+  const handleSave = async () => {
+    const options = {
+      data: { email: ticket?.email, code: ticket?.code },
+    };
+    const result = await isMatchedTicket(options);
+    if (result?.data?.success) {
+      if (result?.data?.valid) {
+        toast.success("Ticket Verification Success!");
+        dispatch(setSelectedTmp(null));
+        dispatch(setTemplateData(null));
+        dispatch(setTempResult(null));
+        localStorage.setItem(TICKET_TOKEN_NAME, result?.data?.token);
+        dispatch(setTicket(result?.data?.data));
+        router.push(`/templates/ticket-verification`);
+      } else {
+        toast.error("Ticket Credentials Not Valid");
+      }
+    } else {
+      toast.error(result.data?.message);
+    }
+  };
 
   const handleRemove = async () => {
     const options = {
@@ -69,11 +106,14 @@ const TicketCard = ({ ticket }) => {
               >
                 {iTrash}
               </div>
-              <Link href={`/templates/${ticket?._id}`} target="_blank">
-                <div className="hover:text-orange-600 w-5 h-5 hover:bg-orange-50 bg-orange-200 flex justify-center items-center">
-                  {iView}
-                </div>
-              </Link>
+              {/* <Link href={`/templates/${ticket?._id}`} target="_blank"> */}
+              <div
+                onClick={() => handleSave()}
+                className="hover:text-orange-600 w-5 h-5 hover:bg-orange-50 bg-orange-200 flex justify-center items-center"
+              >
+                {iView}
+              </div>
+              {/* </Link> */}
             </div>
           </div>
         </div>
