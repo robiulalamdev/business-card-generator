@@ -10,6 +10,10 @@ const initialState = {
   tempResult: null,
   liveTempData: null,
   templateTab: 0,
+
+  //review template page
+  openTempForm: false,
+  openChooseTempModal: false,
 };
 
 const globalsSlice = createSlice({
@@ -43,6 +47,14 @@ const globalsSlice = createSlice({
     setTemplateTab: (state, action) => {
       state.templateTab = action.payload;
     },
+
+    // template modal
+    setOpenTempForm: (state, action) => {
+      state.openTempForm = action.payload;
+    },
+    setOpenChooseTempModal: (state, action) => {
+      state.openChooseTempModal = action.payload;
+    },
   },
 });
 
@@ -56,6 +68,10 @@ export const {
   setTemplateSmallData,
   setLiveTempData,
   setTemplateTab,
+
+  // template review
+  setOpenTempForm,
+  setOpenChooseTempModal,
 } = globalsSlice.actions;
 
 export default globalsSlice.reducer;

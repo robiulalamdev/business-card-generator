@@ -10,17 +10,19 @@ const TemplatesPage = () => {
   const { ticketLoading } = useContext(AuthContext);
   const { ticket, selectedTmp } = useSelector((state) => state.global);
   // console.log(selectedTmp);
-  // console.log("ticket: ", ticket);
+  console.log("ticket: ", ticket);
+
+  console.log(ticketLoading);
   return (
     <>
-      {ticket ? (
+      {!ticketLoading && ticket ? (
         <>{selectedTmp ? <TemplateMain /> : <AllTemplates />}</>
       ) : (
         <TicketForm />
       )}
 
-      {ticketLoading && !ticket && (
-        <div className="flex justify-center items-center h-screen">
+      {ticketLoading && (
+        <div className="flex justify-center items-center h-screen absolute top-0 bg-white w-full">
           <FallingLines
             color="#4fa94d"
             width="100"

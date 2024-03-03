@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 
 const TemplateView = () => {
   const { html } = useSelector((state) => state.global);
-  console.log(html);
   return (
     <iframe
       style={{

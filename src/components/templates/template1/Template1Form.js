@@ -1,28 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 import useInputPattern from "@/lib/hooks/useInputPattern";
 import { iUpload } from "@/lib/icons/icons";
-import { Button, Dialog } from "@material-tailwind/react";
-import React, { useRef, useState } from "react";
+import { Button } from "@material-tailwind/react";
+import React, { useContext, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { SpinnerCircularFixed } from "spinners-react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
-  setGenerateStep,
   setHtml,
-  setTempResult,
   setTemplateData,
 } from "@/redux/features/globals/globalsSlice";
 import FooterSocialInput from "@/components/commons/FooterSocialInput";
 import BannerInput from "@/components/commons/BannerInput";
-import { useCreateTemplateMutation } from "@/redux/features/template/templateApi";
-import { toast } from "sonner";
 import { temp1Html } from "@/lib/datas/generateHtml/temp1";
+import { convertImageToBase64 } from "@/lib/globalServices";
+import { AuthContext } from "@/components/context/AuthContext";
 
 const Template1Form = () => {
-  const { selectedTmp, generateStep, templateData, ticket } = useSelector(
-    (state) => state.global
-  );
-  const { handlePhoneNumberInput, handleNumber } = useInputPattern();
+  const { handleSave, saveIsLoading, setSaveIsLoading, handleSetHtmlCode } =
+    useContext(AuthContext);
+  const { handleNumber } = useInputPattern();
   const {
     handleSubmit,
     register,
@@ -31,69 +28,30 @@ const Template1Form = () => {
     control,
     formState: { errors },
   } = useForm();
-  const [createTemplate] = useCreateTemplateMutation();
 
   const dispatch = useDispatch();
 
   // stats
-  const [isLoading, setIsLoading] = useState(false);
   const [logo, setLogo] = useState(null);
   const [banner, setBanner] = useState(null);
 
   // refs
   const logoRef = useRef();
 
-  const convertImageToBase64 = async (imageFile) => {
-    return new Promise((resolve, reject) => {
-      if (!imageFile || !(imageFile instanceof File)) {
-        reject("Invalid image file");
-      }
-
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        resolve(e.target.result);
-      };
-
-      reader.onerror = (error) => {
-        reject(error);
-      };
-
-      reader.readAsDataURL(imageFile);
-    });
-  };
-
-  const handleSave = async () => {
-    const options = {
-      data: { template: templateData, template_no: 1, email: ticket?.email },
-    };
-    const result = await createTemplate(options);
-    if (result?.data?.success) {
-      toast.success("Business Card Save Success");
-      dispatch(setTempResult(result?.data?.data));
-      dispatch(setGenerateStep(2));
-    } else {
-      toast.error("Business Card Save Failed");
-    }
-    setIsLoading(false);
-  };
-
   const handleGenerate = async (data) => {
     if (!logo) {
       logoRef.current.focus();
       return;
     }
-    setIsLoading(true);
+    setSaveIsLoading(true);
     const url = await convertImageToBase64(logo);
     let bannerUrl = "";
     if (banner) {
       bannerUrl = await convertImageToBase64(banner);
     }
-
     await dispatch(setTemplateData({ ...data, logo: url, banner: bannerUrl }));
-    const html = await temp1Html({ ...data, logo: url });
-    await dispatch(setHtml(html));
-    handleSave();
+    await handleSetHtmlCode({ ...data, logo: url }, 1);
+    await handleSave(1);
   };
   return (
     <>
@@ -318,7 +276,7 @@ const Template1Form = () => {
             type="submit"
             className="flex justify-center items-center gap-2 max-w-[180px] w-full h-[48px] shadow-none hover:shadow-none rounded-sm bg-primary"
           >
-            {isLoading && (
+            {saveIsLoading && (
               <SpinnerCircularFixed
                 size={30}
                 thickness={150}
@@ -331,14 +289,6 @@ const Template1Form = () => {
           </Button>
         </form>
       </div>
-      {/* <Dialog
-        size="xs"
-        open={!isLoading && cardData}
-        handler={() => setCardData(null)}
-        className="bg-white flex justify-center items-center py-5"
-      >
-        <TemplateCard1 cardData={cardData} />
-      </Dialog> */}
     </>
   );
 };

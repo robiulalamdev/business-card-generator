@@ -53,3 +53,23 @@ export function decodeToken(token) {
   const decoded = jwt.verify(token, secret);
   return decoded;
 }
+
+export const convertImageToBase64 = async (imageFile) => {
+  return new Promise((resolve, reject) => {
+    if (!imageFile || !(imageFile instanceof File)) {
+      reject("Invalid image file");
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      resolve(e.target.result);
+    };
+
+    reader.onerror = (error) => {
+      reject(error);
+    };
+
+    reader.readAsDataURL(imageFile);
+  });
+};

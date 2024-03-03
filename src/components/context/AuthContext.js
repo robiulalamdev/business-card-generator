@@ -5,30 +5,40 @@ import { BASE_URL, SECRETE_TOKEN, TICKET_TOKEN_NAME } from "@/lib/global";
 import {
   setGenerateStep,
   setHtml,
+  setOpenChooseTempModal,
+  setOpenTempForm,
   setSelectedTmp,
   setTempResult,
   setTicket,
 } from "@/redux/features/globals/globalsSlice";
+import { useCreateTemplateMutation } from "@/redux/features/template/templateApi";
 import { useGetTicketByTokenQuery } from "@/redux/features/ticket/ticketApi";
 import { useUserQuery } from "@/redux/features/user/userApi";
 import React, { createContext, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const { data, refetch, isLoading } = useUserQuery();
-  const [token, setToken] = useState(
+
+  const token =
     typeof window !== "undefined"
       ? localStorage.getItem(TICKET_TOKEN_NAME)
-      : null
-  );
+      : null;
 
-  const { data: ticket, refetch: ticketRefetch } =
+  const { data: ticketData, refetch: ticketRefetch } =
     useGetTicketByTokenQuery(token);
+
+  const { selectedTmp, generateStep, templateData, ticket } = useSelector(
+    (state) => state.global
+  );
+  const [createTemplate] = useCreateTemplateMutation();
 
   const [user, setUser] = useState(null);
   const [ticketLoading, setTicketLoading] = useState(true);
+  const [saveIsLoading, setSaveIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -42,37 +52,70 @@ export function AuthProvider({ children }) {
     }
   }, [data]);
 
-  const handleSetHtmlCode = async (template) => {
-    const html = await generateHtml(
-      ticket?.template?.template,
-      parseInt(template?._id)
-    );
+  const handleSetHtmlCode = async (template, id) => {
+    const html = await generateHtml(template, parseInt(id));
     await dispatch(setHtml(html));
+  };
+
+  const handleTemp = async () => {
+    if (ticketData?.data) {
+      await dispatch(setTicket(ticketData?.data));
+    }
+    if (ticketData?.template) {
+      const template = await templates.find(
+        (tm) => tm._id === parseInt(ticketData?.template?.template_no)
+      );
+      if (template) {
+        await dispatch(setSelectedTmp(template));
+        await handleSetHtmlCode(ticketData?.template?.template, template?._id);
+      }
+      await dispatch(setTempResult(ticketData?.template));
+      await dispatch(setGenerateStep(2));
+    }
+    setTimeout(() => {
+      setTicketLoading(false);
+    }, 2000);
   };
 
   useEffect(() => {
     setTicketLoading(true);
-    if (ticket?.data) {
-      dispatch(setTicket(ticket?.data));
-    }
-    if (ticket?.template) {
-      const template = templates.find(
-        (tm) => tm._id === parseInt(ticket?.template?.template_no)
-      );
-      if (template) {
-        dispatch(setSelectedTmp(template));
-        handleSetHtmlCode(template);
-      }
-      dispatch(setTempResult(ticket?.template));
-      dispatch(setGenerateStep(2));
-    }
-    setTicketLoading(false);
-  }, [ticket]);
+    handleTemp();
+
+    return () => {
+      setTicketLoading(false);
+    };
+  }, [ticketData]);
 
   const logout = async () => {
     localStorage.removeItem(SECRETE_TOKEN);
     setUser(null);
     refetch();
+  };
+
+  /// post template
+  const handleSave = async (template_no) => {
+    if (templateData) {
+      const options = {
+        data: {
+          template: templateData,
+          template_no: template_no,
+          email: ticket?.email,
+        },
+      };
+      const result = await createTemplate(options);
+      if (result?.data?.success) {
+        toast.success("Business Card Save Success");
+        dispatch(setTempResult(result?.data?.data));
+        dispatch(setGenerateStep(2));
+        dispatch(setOpenChooseTempModal(false));
+        dispatch(setOpenTempForm(false));
+      } else {
+        toast.error("Business Card Save Failed");
+      }
+    } else {
+      toast.error("Something went wrong, please try again");
+    }
+    setSaveIsLoading(false);
   };
 
   const contextValue = {
@@ -82,6 +125,14 @@ export function AuthProvider({ children }) {
     isLoading,
     logout,
     ticketLoading,
+    ticketRefetch,
+    setTicketLoading,
+
+    // template
+    setSaveIsLoading,
+    saveIsLoading,
+    handleSave,
+    handleSetHtmlCode,
   };
 
   return (

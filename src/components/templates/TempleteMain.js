@@ -14,35 +14,26 @@ import {
 } from "@/redux/features/template/templateApi";
 import { Button } from "@material-tailwind/react";
 import html2canvas from "html2canvas";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useState } from "react";
 import QRCode from "react-qr-code";
 import { useDispatch, useSelector } from "react-redux";
 import { ScaleLoader } from "react-spinners";
 import { toast } from "sonner";
-import LiveBanner from "../LiveTemp/LiveBanner";
-import LiveTempLogo from "../LiveTemp/LiveTempLogo";
-import LIveTempFooter from "../LiveTemp/LIveTempFooter";
 import { SpinnerCircularFixed } from "spinners-react";
 import { dcards } from "@/lib/datas/digital-cards";
 import Image from "next/image";
 import TemplateSidebar from "./TemplateSidebar";
-import { useReactToPrint } from "react-to-print";
 import LetterHead from "../template_preview/LetterHead";
+import TemplateReview from "../template_preview/TemplateReview";
+import BannerReview from "../template_preview/BannerReview";
 
 const TemplateMain = () => {
   const [sendSourceCode, { isLoading: sourceLoading }] =
     useSendSourceCodeMutation();
   const [updateTempById, { isLoading: updateLoading }] =
     useUpdateTempByIdMutation();
-  const {
-    selectedTmp,
-    generateStep,
-    templateData,
-    html,
-    tempResult,
-    ticket,
-    templateTab,
-  } = useSelector((state) => state.global);
+  const { selectedTmp, generateStep, html, tempResult, ticket, templateTab } =
+    useSelector((state) => state.global);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
@@ -72,25 +63,6 @@ const TemplateMain = () => {
         toast.error("Something went wrong!");
       }
     });
-  };
-
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
-
-  const printBanner = async () => {
-    const element = document.getElementById("bannerContainer"),
-      canvas = await html2canvas(element),
-      data = canvas.toDataURL("image/jpg"),
-      link = document.createElement("a");
-
-    link.href = data;
-    link.download = "downloaded-image.jpg";
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   const downloadQRCode = async () => {
@@ -141,60 +113,8 @@ const TemplateMain = () => {
             </div>
             {selectedTmp && generateStep === 2 && (
               <div className="flex flex-col justify-center items-center h-screen">
-                {templateTab === 0 && (
-                  <div className="flex flex-col items-end gap-4">
-                    <div ref={componentRef} className="bg-white">
-                      {selectedTmp?.template}
-                    </div>
-                    <Button
-                      onClick={() => handlePrint()}
-                      size="sm"
-                      className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
-                    >
-                      Download
-                    </Button>
-                  </div>
-                )}
-                {templateTab === 1 && (
-                  <div className="flex flex-col items-end gap-4 ">
-                    <div
-                      id="bannerContainer"
-                      className="min-w-[600px] max-w-[600px] min-h-[600px] max-h-[600px] rounded-md bg-orange-600 mx-auto shadow shadow-gray-300 overflow-hidden"
-                    >
-                      {tempResult?.template?.banner ? (
-                        <div className="relative min-w-[600px] min-h-[600px] max-h-[600px]">
-                          <img
-                            src={tempResult?.template?.banner}
-                            alt=""
-                            className="min-w-[600px] max-w-[600px] min-h-[600px] max-h-[600px] object-cover"
-                          />
-                          <div className="flex justify-center items-center absolute top-0 w-full h-full">
-                            <img
-                              src={tempResult?.template?.logo}
-                              alt=""
-                              className="h-[80px] w-[80px] object-cover rounded-full"
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <div className=" w-full h-full flex justify-center items-center">
-                          <h1 className="text-sm font-semibold text-gray-600">
-                            Banner Here
-                          </h1>
-                        </div>
-                      )}
-                    </div>
-                    <Button
-                      onClick={() => printBanner()}
-                      size="sm"
-                      className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
-                    >
-                      Download
-                    </Button>
-                  </div>
-                )}
+                {templateTab === 0 && <TemplateReview />}
+                {templateTab === 1 && <BannerReview />}
 
                 {templateTab === 2 && <LetterHead data={tempResult} />}
 

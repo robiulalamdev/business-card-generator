@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo from "../../assets/brand/logo.png";
 import Image from "next/image";
 import QRCode from "react-qr-code";
@@ -11,14 +11,18 @@ import { toast } from "sonner";
 import { useIsMatchedTicketMutation } from "@/redux/features/template/templateApi";
 import { useDispatch } from "react-redux";
 import {
+  setGenerateStep,
+  setHtml,
   setSelectedTmp,
   setTempResult,
   setTemplateData,
   setTicket,
 } from "@/redux/features/globals/globalsSlice";
 import { useRouter } from "next/router";
+import { AuthContext } from "../context/AuthContext";
 
 const TicketCard = ({ ticket }) => {
+  const { ticketRefetch, setTicketLoading } = useContext(AuthContext);
   const [removeTicket, { isLoading }] = useRemoveTicketMutation();
   const [isMatchedTicket, { ticketMatchIsLoading }] =
     useIsMatchedTicketMutation();
@@ -28,6 +32,7 @@ const TicketCard = ({ ticket }) => {
   const dispatch = useDispatch();
 
   const handleSave = async () => {
+    setTicketLoading(true);
     const options = {
       data: { email: ticket?.email, code: ticket?.code },
     };
@@ -38,8 +43,11 @@ const TicketCard = ({ ticket }) => {
         dispatch(setSelectedTmp(null));
         dispatch(setTemplateData(null));
         dispatch(setTempResult(null));
+        dispatch(setTicket(null));
+        dispatch(setHtml(null));
+        dispatch(setGenerateStep(1));
         localStorage.setItem(TICKET_TOKEN_NAME, result?.data?.token);
-        dispatch(setTicket(result?.data?.data));
+        ticketRefetch();
         router.push(`/templates/ticket-verification`);
       } else {
         toast.error("Ticket Credentials Not Valid");
