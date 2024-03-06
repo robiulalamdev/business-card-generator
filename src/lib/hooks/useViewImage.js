@@ -7,7 +7,7 @@ const useViewImage = () => {
         new Blob([img], { type: "application/octet-stream" })
       );
     } else {
-      return `${BASE_URL}/uploads/${img}`;
+      return img;
     }
   };
   return { viewImg };

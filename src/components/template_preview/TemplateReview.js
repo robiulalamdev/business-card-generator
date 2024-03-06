@@ -82,7 +82,10 @@ const TemplateReview = ({}) => {
               {templates.map((tmp, index) => (
                 <div
                   key={index}
-                  className="w-full h-full cursor-pointer hover:border hover:border-primary bg-white overflow-hidden"
+                  className={`w-full h-full cursor-pointer hover:border hover:border-primary bg-white overflow-hidden ${
+                    selectedTmp?._id === tmp?._id &&
+                    "border-[4px] border-primary"
+                  }`}
                   style={{
                     boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
                   }}

@@ -10,9 +10,6 @@ const TemplatesPage = () => {
   const { ticketLoading } = useContext(AuthContext);
   const { ticket, selectedTmp } = useSelector((state) => state.global);
   // console.log(selectedTmp);
-  console.log("ticket: ", ticket);
-
-  console.log(ticketLoading);
   return (
     <>
       {!ticketLoading && ticket ? (

@@ -23,7 +23,7 @@ module.exports = withMT({
       },
       fontFamily: {
         inter: ["Inter", "serif"],
-        inter: ["Inter", "sans-serif"],
+        "open-sans": ["Open Sans", "sans-serif"],
       },
     },
   },

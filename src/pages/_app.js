@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 
 export default function App({ Component, pageProps }) {
   const getLayout = Component.getLayout ?? ((page) => page);
+
   return (
     <ThemeProvider>
       <Provider store={store}>

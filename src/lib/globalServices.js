@@ -19,7 +19,7 @@ export const handleDownload = (url) => {
   link.click();
 };
 
-const base64toBlob = (base64Data) => {
+export const base64toBlob = (base64Data) => {
   const byteString = atob(base64Data.split(",")[1]);
   const mimeString = base64Data.split(",")[0].split(":")[1].split(";")[0];
   const ab = new ArrayBuffer(byteString.length);
@@ -55,21 +55,34 @@ export function decodeToken(token) {
 }
 
 export const convertImageToBase64 = async (imageFile) => {
-  return new Promise((resolve, reject) => {
-    if (!imageFile || !(imageFile instanceof File)) {
-      reject("Invalid image file");
-    }
+  if (imageFile instanceof File && imageFile.type.startsWith("image/")) {
+    return new Promise((resolve, reject) => {
+      if (!imageFile || !(imageFile instanceof File)) {
+        reject("Invalid image file");
+      }
 
-    const reader = new FileReader();
+      const reader = new FileReader();
 
-    reader.onload = (e) => {
-      resolve(e.target.result);
-    };
+      reader.onload = (e) => {
+        resolve(e.target.result);
+      };
 
-    reader.onerror = (error) => {
-      reject(error);
-    };
+      reader.onerror = (error) => {
+        reject(error);
+      };
 
-    reader.readAsDataURL(imageFile);
-  });
+      reader.readAsDataURL(imageFile);
+    });
+  } else {
+    return imageFile;
+  }
+};
+
+export const clickSound = () => {
+  const audio = new Audio(
+    "https://cdn.pixabay.com/download/audio/2023/06/15/audio_a0e2c53290.mp3?filename=mouse-click-153941.mp3"
+  );
+  audio.preload = "auto";
+  audio.load();
+  audio.play();
 };

@@ -12,7 +12,7 @@ import {
   useSendSourceCodeMutation,
   useUpdateTempByIdMutation,
 } from "@/redux/features/template/templateApi";
-import { Button } from "@material-tailwind/react";
+import { Button, Dialog } from "@material-tailwind/react";
 import html2canvas from "html2canvas";
 import React, { useState } from "react";
 import QRCode from "react-qr-code";
@@ -35,6 +35,7 @@ const TemplateMain = () => {
   const { selectedTmp, generateStep, html, tempResult, ticket, templateTab } =
     useSelector((state) => state.global);
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
   const copyToClipboard = (text) => {
@@ -59,6 +60,7 @@ const TemplateMain = () => {
       const result = await sendSourceCode(options);
       if (result?.data?.success) {
         toast.success("Source Code send to email");
+        setOpen(true);
       } else {
         toast.error("Something went wrong!");
       }
@@ -217,6 +219,65 @@ const TemplateMain = () => {
           </div>
         </div>
       )}
+
+      <Dialog
+        open={open}
+        handler={() => setOpen(false)}
+        size="xs"
+        className="p-0"
+      >
+        <div className="w-full h-full min-h-[200px] max-h-[400px] overflow-y-auto bg-white p-2 md:p-5 rounded">
+          <h1 className="text-center font-bold font-open-sans text-primary leading-5 text-base">
+            Important Instructions and Resources for Email Signature and
+            Branding Materials
+          </h1>
+
+          <p
+            className="font-open-sans text-sm mt-3"
+            style={{ color: "rgb(13, 13, 13)" }}
+          >
+            You are all set now. Check your email for instructions on how to use
+            the email signature. We have also attached the letterhead in A4 size
+            and the social media cover image in JPG format for you to download.
+            If you need custom-made designs, please contact us at
+            info@logoinhours.com. Additionally, if you require a website, any
+            mobile apps, or applications, feel free to reach out to us. We also
+            specialize in fixing{" "}
+            <a
+              href="https://www.fixwebsiteissues.com/"
+              target="_blank"
+              className="font-bold text-primary"
+            >
+              <i>website errors</i>
+            </a>{" "}
+            and optimizing SEO for websites and Google Maps, ensuring 100%
+            satisfaction. For any further branding or{" "}
+            <a
+              href="https://anygraphicstoday.com/"
+              target="_blank"
+              className="font-bold text-primary"
+            >
+              <i>graphic design</i>
+            </a>{" "}
+            needs, visit our website at Any Graphics Today or{" "}
+            <a
+              href="https://www.logoinhours.com/"
+              target="_blank"
+              className="font-bold text-primary"
+            >
+              <i>Logo In Hours LLC</i>
+            </a>{" "}
+          </p>
+          <div className="flex justify-end">
+            <Button
+              onClick={() => setOpen(false)}
+              className="w-[70px] h-8 rounded bg-primary text-white font-open-sans p-0 shadow-none hover:shadow-none normal-case font-normal"
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      </Dialog>
     </>
   );
 };

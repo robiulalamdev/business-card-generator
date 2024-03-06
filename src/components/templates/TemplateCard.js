@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { clickSound } from "@/lib/globalServices";
 import { setSelectedTmp } from "@/redux/features/globals/globalsSlice";
 import Image from "next/image";
 import React from "react";
@@ -8,6 +9,7 @@ const TemplateCard = ({ template }) => {
   const dispatch = useDispatch();
 
   const handleGetData = () => {
+    clickSound();
     dispatch(setSelectedTmp(template));
   };
   return (
