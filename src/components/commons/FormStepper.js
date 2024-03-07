@@ -10,7 +10,7 @@ const tabs = [
 const FormStepper = ({ stepId, setStepId }) => {
   const handleStep = async (id) => {
     if (stepId > id && stepId !== 1) {
-      setStepId(stepId - 1);
+      setStepId(stepId - id);
     }
   };
   return (

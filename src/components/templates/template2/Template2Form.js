@@ -248,7 +248,7 @@ const Template2Form = () => {
                 </label>
                 <input
                   {...register("facebook", { required: true })}
-                  type="url"
+                  type="text"
                   required
                   placeholder="Enter URL"
                   className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
@@ -264,7 +264,7 @@ const Template2Form = () => {
                 </label>
                 <input
                   {...register("instagram", { required: true })}
-                  type="url"
+                  type="text"
                   required
                   placeholder="Enter URL"
                   className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
@@ -279,7 +279,7 @@ const Template2Form = () => {
                 </label>
                 <input
                   {...register("pinterest", { required: true })}
-                  type="url"
+                  type="text"
                   required
                   placeholder="Enter URL"
                   className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"

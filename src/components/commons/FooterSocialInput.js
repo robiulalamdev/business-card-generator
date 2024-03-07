@@ -30,7 +30,7 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
         </label>
         <input
           {...register("footer.facebook", { required: false })}
-          type="url"
+          type="text"
           required={false}
           placeholder="Enter URL"
           className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
@@ -45,7 +45,7 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
         </label>
         <input
           {...register("footer.twitter", { required: false })}
-          type="url"
+          type="text"
           required={false}
           placeholder="Enter URL"
           className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
@@ -60,7 +60,7 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
         </label>
         <input
           {...register("footer.linkedin", { required: false })}
-          type="url"
+          type="text"
           required={false}
           placeholder="Enter URL"
           className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
@@ -75,7 +75,7 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
         </label>
         <input
           {...register("footer.instagram", { required: false })}
-          type="url"
+          type="text"
           required={false}
           placeholder="Enter URL"
           className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"

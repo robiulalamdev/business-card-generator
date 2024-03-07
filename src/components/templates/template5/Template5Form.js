@@ -10,14 +10,16 @@ import BannerInput from "@/components/commons/BannerInput";
 import FooterSocialInput from "@/components/commons/FooterSocialInput";
 import { convertImageToBase64 } from "@/lib/globalServices";
 import { AuthContext } from "@/components/context/AuthContext";
-import LogoInput from "@/components/commons/LogoInput";
 import FormStepper from "@/components/commons/FormStepper";
+import LogoInput from "@/components/commons/LogoInput";
 import useInputPattern from "@/lib/hooks/useInputPattern";
 
-const Template3Form = () => {
+const Template5Form = () => {
   const { handleSave, saveIsLoading, setSaveIsLoading, handleSetHtmlCode } =
     useContext(AuthContext);
+
   const { tempResult } = useSelector((state) => state.global);
+
   const {
     handleSubmit,
     register,
@@ -33,19 +35,13 @@ const Template3Form = () => {
   // stats
   const [stepId, setStepId] = useState(1);
   const [logo, setLogo] = useState(null);
-  const [signature, setSignature] = useState(null);
   const [banner, setBanner] = useState(null);
 
   // refs
   const logoRef = useRef();
-  const signatureRef = useRef();
 
   const handleGenerate = async (data) => {
     if (!logo) {
-      return;
-    }
-    if (!signature) {
-      signatureRef.current.focus();
       return;
     }
     if (stepId < 3) {
@@ -59,41 +55,24 @@ const Template3Form = () => {
       if (banner) {
         bannerUrl = await convertImageToBase64(banner);
       }
-      const signatureUrl = await convertImageToBase64(signature);
 
       await dispatch(
-        setTemplateData({
-          ...data,
-          logo: url,
-          banner: bannerUrl,
-          signature: signatureUrl,
-        })
+        setTemplateData({ ...data, logo: url, banner: bannerUrl })
       );
-      await handleSetHtmlCode(
-        {
-          ...data,
-          logo: url,
-          signature: signatureUrl,
-        },
-        3
-      );
-      handleSave(3);
+      await handleSetHtmlCode({ ...data, logo: url }, 5);
+      await handleSave(5);
       setLogo(null);
       setBanner(null);
-      setSignature(null);
     }
   };
 
   const handleValues = async () => {
-    const { logo, banner, signature, ...other } = tempResult?.template;
+    const { logo, banner, ...other } = tempResult?.template;
     if (logo) {
       setLogo(logo);
     }
     if (banner) {
       setBanner(banner);
-    }
-    if (signature) {
-      setSignature(signature);
     }
     for (const key in other) {
       const value = other[key];
@@ -128,13 +107,6 @@ const Template3Form = () => {
           >
             <div className="col-span-2">
               <LogoInput file={logo} setFile={setLogo} label="Logo" />
-            </div>
-            <div className="col-span-2">
-              <LogoInput
-                file={signature}
-                setFile={setSignature}
-                label="Signature"
-              />
             </div>
             <div className="col-span-2">
               <label
@@ -323,6 +295,7 @@ const Template3Form = () => {
               <BannerInput setFile={setBanner} file={banner} />
             </div>
           </div>
+
           <div className={`col-span-2 ${stepId === 3 ? "block" : "hidden"}`}>
             <h1>Footer Information</h1>
             <FooterSocialInput
@@ -353,4 +326,4 @@ const Template3Form = () => {
   );
 };
 
-export default Template3Form;
+export default Template5Form;

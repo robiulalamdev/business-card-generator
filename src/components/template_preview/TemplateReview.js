@@ -82,7 +82,7 @@ const TemplateReview = ({}) => {
               {templates.map((tmp, index) => (
                 <div
                   key={index}
-                  className={`w-full h-full cursor-pointer hover:border hover:border-primary bg-white overflow-hidden ${
+                  className={`w-full h-full cursor-pointer hover:border hover:border-primary bg-white overflow-hidden group relative ${
                     selectedTmp?._id === tmp?._id &&
                     "border-[4px] border-primary"
                   }`}
@@ -91,11 +91,22 @@ const TemplateReview = ({}) => {
                   }}
                 >
                   <Image
-                    onClick={() => handleGetData(tmp)}
-                    className="w-full border h-full object-contain hover:scale-125 duration-500"
+                    className="w-full border h-full object-contain hover:scale-150 duration-700"
                     src={tmp.img}
                     alt=""
                   />
+                  <div
+                    className="absolute top-0 w-full h-full hidden group-hover:inline-block bg-primary/10 backdrop-blur-[4px] group-hover:duration-200
+                        group-hover:flex justify-center items-center
+                        "
+                  >
+                    <Button
+                      onClick={() => handleGetData(tmp)}
+                      className="w-[100px] h-8 rounded-sm bg-primary p-0"
+                    >
+                      Select
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>

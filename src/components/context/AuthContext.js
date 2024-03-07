@@ -1,7 +1,6 @@
-import { temp1Html } from "@/lib/datas/generateHtml/temp1";
 import { generateHtml } from "@/lib/datas/htmls";
 import { templates } from "@/lib/datas/templates";
-import { BASE_URL, SECRETE_TOKEN, TICKET_TOKEN_NAME } from "@/lib/global";
+import { SECRETE_TOKEN, TICKET_TOKEN_NAME } from "@/lib/global";
 import {
   setGenerateStep,
   setHtml,
