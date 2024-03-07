@@ -74,10 +74,14 @@ const BannerReview = () => {
               </div>
             </div>
           ) : (
-            <div className=" w-full h-full flex justify-center items-center">
-              <h1 className="text-sm font-semibold text-gray-600">
-                Banner Here
-              </h1>
+            <div className="relative min-w-[600px] min-h-[600px] max-h-[600px] bg-white">
+              <div className="flex justify-center items-center absolute top-0 w-full h-full">
+                <img
+                  src={tempResult?.template?.logo}
+                  alt=""
+                  className="h-[80px] w-[80px] object-cover rounded-full"
+                />
+              </div>
             </div>
           )}
         </div>

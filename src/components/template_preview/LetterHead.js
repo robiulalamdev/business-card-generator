@@ -32,8 +32,17 @@ const LetterHead = ({ data }) => {
 
   return (
     <div className="grid grid-cols-2 gap-8 w-full h-full p-4">
-      <div ref={componentRef1} className="w-full h-full bg-white py-16">
-        <div className="bg-white h-full w-full">
+      <div
+        ref={componentRef1}
+        className="w-full h-full bg-white py-16"
+        style={{
+          backgroundImage: `url(${data?.template?.letter_head_bg})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className={`h-full w-full`}>
           <div className="flex justify-between items-start max-w-[600px] mx-auto">
             <img
               src={data?.template?.logo}
@@ -51,29 +60,19 @@ const LetterHead = ({ data }) => {
                   {data?.template?.footer?.contact_no}
                 </p>
               )}
+              {data?.template?.footer?.email && (
+                <p className="text-xs text-gray-600">
+                  {data?.template?.footer?.email}
+                </p>
+              )}
               {data?.template?.footer?.website && (
                 <p className="text-xs text-gray-600">
                   {data?.template?.footer?.website}
                 </p>
               )}
-              {data?.template?.footer?.twitter && (
+              {data?.template?.footer?.address && (
                 <p className="text-xs text-gray-600">
-                  {data?.template?.footer?.twitter}
-                </p>
-              )}
-              {data?.template?.footer?.facebook && (
-                <p className="text-xs text-gray-600">
-                  {data?.template?.footer?.facebook}
-                </p>
-              )}
-              {data?.template?.footer?.instagram && (
-                <p className="text-xs text-gray-600">
-                  {data?.template?.footer?.instagram}
-                </p>
-              )}
-              {data?.template?.footer?.linkedin && (
-                <p className="text-xs text-gray-600">
-                  {data?.template?.footer?.linkedin}
+                  {data?.template?.footer?.address}
                 </p>
               )}
             </div>
@@ -89,8 +88,17 @@ const LetterHead = ({ data }) => {
         </Button>
       </div>
 
-      <div ref={componentRef2} className="w-full h-full bg-white py-16">
-        <div className="bg-white w-full h-full">
+      <div
+        ref={componentRef2}
+        className="w-full h-full bg-white py-16"
+        style={{
+          backgroundImage: `url(${data?.template?.letter_head_bg})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className={`h-full w-full`}>
           <div className="flex justify-between items-start max-w-[600px] mx-auto">
             <img
               src={data?.template?.logo}
@@ -108,29 +116,19 @@ const LetterHead = ({ data }) => {
                   {data?.template?.footer?.contact_no}
                 </p>
               )}
+              {data?.template?.footer?.email && (
+                <p className="text-xs text-gray-600">
+                  {data?.template?.footer?.email}
+                </p>
+              )}
               {data?.template?.footer?.website && (
                 <p className="text-xs text-gray-600">
                   {data?.template?.footer?.website}
                 </p>
               )}
-              {data?.template?.footer?.twitter && (
+              {data?.template?.footer?.address && (
                 <p className="text-xs text-gray-600">
-                  {data?.template?.footer?.twitter}
-                </p>
-              )}
-              {data?.template?.footer?.facebook && (
-                <p className="text-xs text-gray-600">
-                  {data?.template?.footer?.facebook}
-                </p>
-              )}
-              {data?.template?.footer?.instagram && (
-                <p className="text-xs text-gray-600">
-                  {data?.template?.footer?.instagram}
-                </p>
-              )}
-              {data?.template?.footer?.linkedin && (
-                <p className="text-xs text-gray-600">
-                  {data?.template?.footer?.linkedin}
+                  {data?.template?.footer?.address}
                 </p>
               )}
             </div>

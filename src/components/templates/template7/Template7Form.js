@@ -13,6 +13,8 @@ import { AuthContext } from "@/components/context/AuthContext";
 import FormStepper from "@/components/commons/FormStepper";
 import LogoInput from "@/components/commons/LogoInput";
 import useInputPattern from "@/lib/hooks/useInputPattern";
+import LetterHeadBgInput from "@/components/commons/LetterHeadBgInput";
+import ConfidentialInput from "@/components/commons/ConfidentialInput";
 
 const Template7Form = () => {
   const { handleSave, saveIsLoading, setSaveIsLoading, handleSetHtmlCode } =
@@ -36,6 +38,7 @@ const Template7Form = () => {
   const [stepId, setStepId] = useState(1);
   const [logo, setLogo] = useState(null);
   const [banner, setBanner] = useState(null);
+  const [lhBg, setLhBg] = useState(null);
 
   const handleGenerate = async (data) => {
     if (!logo) {
@@ -49,27 +52,40 @@ const Template7Form = () => {
       setSaveIsLoading(true);
       const url = await convertImageToBase64(logo);
       let bannerUrl = "";
+      let lhBgUrl = "";
       if (banner) {
         bannerUrl = await convertImageToBase64(banner);
       }
+      if (lhBg) {
+        lhBgUrl = await convertImageToBase64(lhBg);
+      }
 
       await dispatch(
-        setTemplateData({ ...data, logo: url, banner: bannerUrl })
+        setTemplateData({
+          ...data,
+          logo: url,
+          banner: bannerUrl,
+          letter_head_bg: lhBgUrl,
+        })
       );
       await handleSetHtmlCode({ ...data, logo: url }, 7);
       await handleSave(7);
       setLogo(null);
       setBanner(null);
+      setLhBg(null);
     }
   };
 
   const handleValues = async () => {
-    const { logo, banner, ...other } = tempResult?.template;
+    const { logo, banner, letter_head_bg, ...other } = tempResult?.template;
     if (logo) {
       setLogo(logo);
     }
     if (banner) {
       setBanner(banner);
+    }
+    if (letter_head_bg) {
+      setLhBg(letter_head_bg);
     }
     for (const key in other) {
       const value = other[key];
@@ -200,20 +216,11 @@ const Template7Form = () => {
               />
             </div>
 
-            <div className="col-span-2">
-              <label
-                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                htmlFor=""
-              >
-                Confidential
-              </label>
-              <textarea
-                {...register("confidential", { required: true })}
-                required
-                placeholder="Enter Confidential"
-                className="w-full h-[150px] outline-none border border-black p-2 rounded text-sm"
-              ></textarea>
-            </div>
+            <ConfidentialInput
+              register={register}
+              watch={watch}
+              setValue={setValue}
+            />
 
             <div className="grid grid-cols-1 gap-2 col-span-2">
               <div className="">
@@ -266,14 +273,30 @@ const Template7Form = () => {
           </div>
 
           <div className={`col-span-2 ${stepId === 2 ? "block" : "hidden"}`}>
-            <label
-              className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-              htmlFor=""
-            >
-              Banner (Optional)
-            </label>
-            <div className="h-[200px] max-w-[600px] w-full">
-              <BannerInput setFile={setBanner} file={banner} />
+            <h1 className="font-bold font-open-sans text-center text-primary mb-2">
+              ADDITIONAL INFORMATION
+            </h1>
+            <div>
+              <label
+                className="text-xs sm:text-sm font-semibold uppercase block"
+                htmlFor=""
+              >
+                Banner (Optional)
+              </label>
+              <div className="h-[200px] max-w-[600px] w-full">
+                <BannerInput setFile={setBanner} file={banner} />
+              </div>
+            </div>
+            <div>
+              <label
+                className="text-xs sm:text-sm font-semibold uppercase block mt-2"
+                htmlFor=""
+              >
+                Letter Head Background (Optional)
+              </label>
+              <div className="h-[200px] max-w-[600px] w-full">
+                <LetterHeadBgInput setFile={setLhBg} file={lhBg} />
+              </div>
             </div>
           </div>
 

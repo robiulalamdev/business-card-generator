@@ -26,13 +26,13 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
           className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
           htmlFor=""
         >
-          Facebook
+          Email
         </label>
         <input
-          {...register("footer.facebook", { required: false })}
-          type="text"
+          {...register("footer.email", { required: false })}
+          type="email"
           required={false}
-          placeholder="Enter URL"
+          placeholder="Enter Email"
           className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
         />
       </div>
@@ -41,13 +41,13 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
           className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
           htmlFor=""
         >
-          Twitter
+          Website (optional)
         </label>
         <input
-          {...register("footer.twitter", { required: false })}
+          {...register("footer.website", { required: false })}
           type="text"
           required={false}
-          placeholder="Enter URL"
+          placeholder="Enter Website URL"
           className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
         />
       </div>
@@ -56,28 +56,13 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
           className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
           htmlFor=""
         >
-          Linkedin
+          Address (optional)
         </label>
         <input
-          {...register("footer.linkedin", { required: false })}
+          {...register("footer.address", { required: false })}
           type="text"
           required={false}
-          placeholder="Enter URL"
-          className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-        />
-      </div>
-      <div className="">
-        <label
-          className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-          htmlFor=""
-        >
-          Instagram
-        </label>
-        <input
-          {...register("footer.instagram", { required: false })}
-          type="text"
-          required={false}
-          placeholder="Enter URL"
+          placeholder="Enter Address"
           className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
         />
       </div>
