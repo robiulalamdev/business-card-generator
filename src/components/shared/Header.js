@@ -4,7 +4,7 @@ import logo from "../../assets/brand/logo.png";
 import { AuthContext } from "../context/AuthContext";
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
-  console.log(user);
+
   return (
     <div className="container flex justify-between items-center py-3 bg-white">
       <span></span>

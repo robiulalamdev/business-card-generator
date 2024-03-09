@@ -17,6 +17,8 @@ const TemplateReview = ({}) => {
     (state) => state.global
   );
 
+  const [preview, setPreview] = useState("");
+
   const dispatch = useDispatch();
 
   const componentRef = useRef();
@@ -97,12 +99,18 @@ const TemplateReview = ({}) => {
                   />
                   <div
                     className="absolute top-0 w-full h-full hidden group-hover:inline-block bg-primary/10 backdrop-blur-[4px] group-hover:duration-200
-                        group-hover:flex justify-center items-center
+                        group-hover:flex justify-center items-center gap-3
                         "
                   >
                     <Button
-                      onClick={() => handleGetData(tmp)}
+                      onClick={() => setPreview(tmp?.img)}
                       className="w-[100px] h-8 rounded-sm bg-primary p-0"
+                    >
+                      Preview
+                    </Button>
+                    <Button
+                      onClick={() => handleGetData(tmp)}
+                      className="w-[100px] h-8 rounded-sm bg-green-600 p-0"
                     >
                       Select
                     </Button>
@@ -118,6 +126,24 @@ const TemplateReview = ({}) => {
             {selectedTmp && <>{selectedTmp?.tmp_form}</>}
           </div>
         )}
+      </Dialog>
+
+      <Dialog open={!!preview} handler={() => setPreview("")} size="xl">
+        <div className="flex justify-center items-center bg-white p-4 relative">
+          <Image
+            className="w-full border h-full object-contain"
+            src={preview}
+            alt=""
+          />
+          <div className="absolute -top-2 -right-2">
+            <Button
+              onClick={() => setPreview("")}
+              className="w-8 h-8 bg-red-600 hover:bg-red-700 p-0 rounded-full"
+            >
+              X
+            </Button>
+          </div>
+        </div>
       </Dialog>
     </>
   );

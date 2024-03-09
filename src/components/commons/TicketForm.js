@@ -11,10 +11,11 @@ import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { SpinnerCircularFixed } from "spinners-react";
 
-const TicketForm = () => {
+const TicketForm = ({ navigate = false }) => {
   const router = useRouter();
   const [errorResult, setErrorResult] = useState("");
   const [isMatchedTicket, { isLoading }] = useIsMatchedTicketMutation();
+
   const {
     handleSubmit,
     register,
@@ -32,6 +33,9 @@ const TicketForm = () => {
         toast.success("Ticket Verification Success!");
         localStorage.setItem(TICKET_TOKEN_NAME, result?.data?.token);
         dispatch(setTicket(result?.data?.data));
+        if (navigate) {
+          router.replace("/templates/ticket-verification");
+        }
       } else {
         setErrorResult("Ticket Credentials Not Valid");
         toast.error("Ticket Credentials Not Valid");
