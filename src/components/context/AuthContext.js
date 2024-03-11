@@ -117,6 +117,11 @@ export function AuthProvider({ children }) {
     setSaveIsLoading(false);
   };
 
+  const logOutTicket = async () => {
+    localStorage.removeItem(TICKET_TOKEN_NAME);
+    window.location.reload();
+  };
+
   const contextValue = {
     user,
     setUser,
@@ -132,6 +137,7 @@ export function AuthProvider({ children }) {
     saveIsLoading,
     handleSave,
     handleSetHtmlCode,
+    logOutTicket,
   };
 
   return (

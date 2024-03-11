@@ -6,7 +6,7 @@ import React from "react";
 const LetterHeadBgInput = ({ setFile, file }) => {
   const { viewImg } = useViewImage();
   return (
-    <div className="w-full h-full bg-gray-100 relative cursor-pointer flex justify-center items-center">
+    <div className="w-full h-[200px] rounded !shadow-none hover:!shadow-none font-normal bg-gray-50 flex flex-col justify-center gap-4 items-center border border-gray-500">
       {file ? (
         <>
           <img

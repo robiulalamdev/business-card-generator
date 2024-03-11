@@ -2,7 +2,6 @@ import TicketForm from "@/components/commons/TicketForm";
 import { AuthContext } from "@/components/context/AuthContext";
 import AllTemplates from "@/components/templates/AllTemplates";
 import TemplateMain from "@/components/templates/TempleteMain";
-import { useRouter } from "next/router";
 import React, { useContext } from "react";
 import { FallingLines } from "react-loader-spinner";
 import { useSelector } from "react-redux";
@@ -10,9 +9,6 @@ import { useSelector } from "react-redux";
 const TemplatesPage = () => {
   const { ticketLoading } = useContext(AuthContext);
   const { ticket, selectedTmp } = useSelector((state) => state.global);
-  const router = useRouter();
-  console.log(router.query);
-  // console.log(selectedTmp);
   return (
     <>
       {!ticketLoading && ticket ? (

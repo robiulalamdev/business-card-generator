@@ -122,7 +122,7 @@ const TemplateReview = ({}) => {
         )}
 
         {openChooseTempModal && openTempForm && (
-          <div className="bg-white my-4 w-fit mx-auto">
+          <div className="my-4 w-full mx-auto">
             {selectedTmp && <>{selectedTmp?.tmp_form}</>}
           </div>
         )}

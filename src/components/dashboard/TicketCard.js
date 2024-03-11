@@ -48,7 +48,7 @@ const TicketCard = ({ ticket }) => {
         dispatch(setGenerateStep(1));
         localStorage.setItem(TICKET_TOKEN_NAME, result?.data?.token);
         ticketRefetch();
-        router.push(`/templates/ticket-verification`);
+        router.push(`/ticket-verification`);
       } else {
         toast.error("Ticket Credentials Not Valid");
       }
@@ -72,7 +72,7 @@ const TicketCard = ({ ticket }) => {
   };
   return (
     <>
-      <div className="border border-blue-gray-400 h-fit cursor-pointer ">
+      <div className="border border-blue-gray-400 h-fit cursor-pointer rounded overflow-hidden shadow font-open-sans">
         <div className="bg-blue-gray-100 flex justify-center items-center w-full h-12">
           <Image
             src={logo}
@@ -82,7 +82,7 @@ const TicketCard = ({ ticket }) => {
         </div>
         <div className="w-full h-full bg-white">
           <div className="px-2 w-full h-full">
-            <h1 className="text-center font-bold uppercase text-blue-gray-500 pt-2">
+            <h1 className="text-center font-bold uppercase text-blue-gray-800 pt-2 font-open-sans">
               Ticket Information
             </h1>
             <div className="flex items-center gap-2 text-xs text-blue-gray-600 mt-3">
@@ -110,14 +110,14 @@ const TicketCard = ({ ticket }) => {
             <div className="grid grid-cols-2">
               <div
                 onClick={() => handleRemove()}
-                className="hover:text-red-600 w-5 h-5 hover:bg-red-50 bg-red-200 flex justify-center items-center"
+                className="hover:text-red-600 w-6 h-6 hover:bg-red-50 bg-red-200 flex justify-center items-center"
               >
                 {iTrash}
               </div>
               {/* <Link href={`/templates/${ticket?._id}`} target="_blank"> */}
               <div
                 onClick={() => handleSave()}
-                className="hover:text-orange-600 w-5 h-5 hover:bg-orange-50 bg-orange-200 flex justify-center items-center"
+                className="hover:text-orange-600 w-6 h-6 hover:bg-orange-50 bg-orange-300 flex justify-center items-center"
               >
                 {iView}
               </div>

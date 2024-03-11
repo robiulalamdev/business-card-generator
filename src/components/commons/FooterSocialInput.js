@@ -4,10 +4,10 @@ import React from "react";
 const FooterSocialInput = ({ register, setValue, watch, errors }) => {
   const { handleNumber } = useInputPattern();
   return (
-    <div className="grid grid-cols-1 gap-2 col-span-2">
+    <div className="grid grid-cols-2 gap-[6px]">
       <div className="">
         <label
-          className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+          className="text-xs sm:text-[12px] font-semibold text-black font-open-sans mb-1 block"
           htmlFor=""
         >
           Contact No
@@ -18,12 +18,12 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
           onInput={handleNumber}
           required={false}
           placeholder="Enter Contact No"
-          className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+          className="w-full h-[37px] bg-gray-50 focus:bg-BPM/5 outline-none border border-gray-500 focus:border-primary px-[6px] rounded text-[12px] font-open-sans placeholder:font-open-sans placeholder:text-[12px] text-black placeholder:text-gray-600"
         />
       </div>
       <div className="">
         <label
-          className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+          className="text-xs sm:text-[12px] font-semibold text-black font-open-sans mb-1 block"
           htmlFor=""
         >
           Email
@@ -33,12 +33,12 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
           type="email"
           required={false}
           placeholder="Enter Email"
-          className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+          className="w-full h-[37px] bg-gray-50 focus:bg-BPM/5 outline-none border border-gray-500 focus:border-primary px-[6px] rounded text-[12px] font-open-sans placeholder:font-open-sans placeholder:text-[12px] text-black placeholder:text-gray-600"
         />
       </div>
       <div className="">
         <label
-          className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+          className="text-xs sm:text-[12px] font-semibold text-black font-open-sans mb-1 block"
           htmlFor=""
         >
           Website (optional)
@@ -48,12 +48,12 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
           type="text"
           required={false}
           placeholder="Enter Website URL"
-          className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+          className="w-full h-[37px] bg-gray-50 focus:bg-BPM/5 outline-none border border-gray-500 focus:border-primary px-[6px] rounded text-[12px] font-open-sans placeholder:font-open-sans placeholder:text-[12px] text-black placeholder:text-gray-600"
         />
       </div>
       <div className="">
         <label
-          className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+          className="text-xs sm:text-[12px] font-semibold text-black font-open-sans mb-1 block"
           htmlFor=""
         >
           Address (optional)
@@ -63,7 +63,7 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
           type="text"
           required={false}
           placeholder="Enter Address"
-          className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
+          className="w-full h-[37px] bg-gray-50 focus:bg-BPM/5 outline-none border border-gray-500 focus:border-primary px-[6px] rounded text-[12px] font-open-sans placeholder:font-open-sans placeholder:text-[12px] text-black placeholder:text-gray-600"
         />
       </div>
     </div>

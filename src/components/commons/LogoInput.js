@@ -21,7 +21,7 @@ const LogoInput = ({ file, setFile, label }) => {
       <div className="">
         {label && (
           <label
-            className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+            className="text-xs sm:text-[12px] font-semibold text-black font-open-sans mb-1 block"
             htmlFor=""
           >
             {label}
@@ -30,14 +30,8 @@ const LogoInput = ({ file, setFile, label }) => {
 
         <Button
           onClick={() => fileRef.current.click()}
-          className={`w-full h-[120px] rounded shadow-none border-2 hover:shadow-none bg-primary_gw flex flex-col justify-center gap-4 items-center`}
+          className={`w-full h-[120px] rounded !shadow-none hover:!shadow-none font-normal bg-gray-50 flex flex-col justify-center gap-4 items-center border border-gray-500`}
         >
-          {/* <input
-            type="text"
-            name="test"
-            required={!file}
-            className="opacity-0"
-          /> */}
           {file ? (
             <img
               className="w-full h-full object-contain"
@@ -47,8 +41,8 @@ const LogoInput = ({ file, setFile, label }) => {
           ) : (
             <>
               <div className="max-w-[40px] text-primary">{iUpload}</div>
-              <h1 className="text-gray-500 text-sm font-normal !normal-case text-current">
-                Upload Image <span>(.png, .jpg, jpeg)</span>
+              <h1 className="text-[12px] text-gray-500 font-open-sans normal-case">
+                Upload Image <span>(.png, .jpg, .jpeg)</span>
               </h1>
             </>
           )}

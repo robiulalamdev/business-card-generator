@@ -1,20 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import { iUpload } from "@/lib/icons/icons";
-import { Button } from "@material-tailwind/react";
-import React, { useContext, useMemo, useRef, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { SpinnerCircularFixed } from "spinners-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setTemplateData } from "@/redux/features/globals/globalsSlice";
-import BannerInput from "@/components/commons/BannerInput";
-import FooterSocialInput from "@/components/commons/FooterSocialInput";
 import { convertImageToBase64 } from "@/lib/globalServices";
 import { AuthContext } from "@/components/context/AuthContext";
-import FormStepper from "@/components/commons/FormStepper";
-import LogoInput from "@/components/commons/LogoInput";
-import useInputPattern from "@/lib/hooks/useInputPattern";
-import LetterHeadBgInput from "@/components/commons/LetterHeadBgInput";
-import ConfidentialInput from "@/components/commons/ConfidentialInput";
+import TemplateFormContainer from "../TemplateFormContainer";
 
 const Template6Form = () => {
   const { handleSave, saveIsLoading, setSaveIsLoading, handleSetHtmlCode } =
@@ -27,10 +18,9 @@ const Template6Form = () => {
     register,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm();
-
-  const { handlePhoneNumberInput } = useInputPattern();
 
   const dispatch = useDispatch();
 
@@ -40,11 +30,7 @@ const Template6Form = () => {
   const [banner, setBanner] = useState(null);
   const [lhBg, setLhBg] = useState(null);
 
-  // refs
-  const logoRef = useRef();
-
   const handleGenerate = async (data) => {
-    console.log(data);
     if (!logo) {
       return;
     }
@@ -74,9 +60,9 @@ const Template6Form = () => {
       );
       await handleSetHtmlCode({ ...data, logo: url }, 6);
       await handleSave(6);
-      setLogo(null);
-      setBanner(null);
-      setLhBg(null);
+      // setLogo(null);
+      // setBanner(null);
+      // setLhBg(null);
     }
   };
 
@@ -111,241 +97,27 @@ const Template6Form = () => {
   }, [tempResult?.template]);
   return (
     <>
-      <FormStepper stepId={stepId} setStepId={setStepId} />
-      <div className="max-w-[600px] h-fit min-h-[350px] border border-primary shadow mx-auto p-5 mt-[20px]">
-        <form
-          onSubmit={handleSubmit(handleGenerate)}
-          className="grid grid-cols-1 gap-4"
-        >
-          <div
-            className={`grid grid-cols-2 gap-4 ${
-              stepId === 1 ? "block" : "hidden"
-            }`}
-          >
-            <div className="col-span-2">
-              <LogoInput file={logo} setFile={setLogo} label="Logo" />
-            </div>
-            <div className="col-span-2">
-              <label
-                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                htmlFor=""
-              >
-                Name
-              </label>
-              <input
-                {...register("name", { required: true })}
-                type="text"
-                required
-                placeholder="Enter Name"
-                className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-              />
-            </div>
-
-            <div className="col-span-1">
-              <label
-                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                htmlFor=""
-              >
-                Designation
-              </label>
-              <input
-                {...register("designation", { required: true })}
-                type="text"
-                required
-                placeholder="Enter Designation"
-                className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-              />
-            </div>
-
-            <div className="col-span-1">
-              <label
-                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                htmlFor=""
-              >
-                Phone
-              </label>
-              <input
-                {...register("phone", { required: true })}
-                type="text"
-                onInput={handlePhoneNumberInput}
-                required
-                placeholder="+1-XXX-XXX-XXXX"
-                className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-              />
-            </div>
-
-            <div className="col-span-2">
-              <label
-                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                htmlFor=""
-              >
-                Company Vision
-              </label>
-              <input
-                {...register("company_vision", { required: false })}
-                type="text"
-                required={false}
-                placeholder="Company Vision"
-                className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-              />
-            </div>
-
-            <div className="col-span-2">
-              <label
-                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                htmlFor=""
-              >
-                Email
-              </label>
-              <input
-                {...register("email", { required: true })}
-                type="email"
-                required
-                placeholder="Enter Email"
-                className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-              />
-            </div>
-            <div className="col-span-2">
-              <label
-                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                htmlFor=""
-              >
-                Website
-              </label>
-              <input
-                {...register("website", { required: true })}
-                type="text"
-                required
-                placeholder="Enter website Url"
-                className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-              />
-            </div>
-            <div className="col-span-2">
-              <label
-                className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                htmlFor=""
-              >
-                Address
-              </label>
-              <input
-                {...register("address", { required: true })}
-                type="text"
-                required
-                placeholder="Enter Address"
-                className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-              />
-            </div>
-
-            <ConfidentialInput
-              register={register}
-              watch={watch}
-              setValue={setValue}
-            />
-
-            <div className="grid grid-cols-1 gap-2 col-span-2">
-              <div className="">
-                <label
-                  className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                  htmlFor=""
-                >
-                  Facebook
-                </label>
-                <input
-                  {...register("facebook", { required: true })}
-                  type="text"
-                  required
-                  placeholder="Enter URL"
-                  className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-                />
-              </div>
-
-              <div className="">
-                <label
-                  className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                  htmlFor=""
-                >
-                  Instagram
-                </label>
-                <input
-                  {...register("instagram", { required: true })}
-                  type="text"
-                  required
-                  placeholder="Enter URL"
-                  className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-                />
-              </div>
-              <div className="">
-                <label
-                  className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
-                  htmlFor=""
-                >
-                  Pinterest
-                </label>
-                <input
-                  {...register("pinterest", { required: true })}
-                  type="text"
-                  required
-                  placeholder="Enter URL"
-                  className="w-full h-[42px] outline-none border border-black px-2 rounded text-sm"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className={`col-span-2 ${stepId === 2 ? "block" : "hidden"}`}>
-            <h1 className="font-bold font-open-sans text-center text-primary mb-2">
-              ADDITIONAL INFORMATION
-            </h1>
-            <div>
-              <label
-                className="text-xs sm:text-sm font-semibold uppercase block"
-                htmlFor=""
-              >
-                Banner (Optional)
-              </label>
-              <div className="h-[200px] max-w-[600px] w-full">
-                <BannerInput setFile={setBanner} file={banner} />
-              </div>
-            </div>
-            <div>
-              <label
-                className="text-xs sm:text-sm font-semibold uppercase block mt-2"
-                htmlFor=""
-              >
-                Letter Head Background (Optional)
-              </label>
-              <div className="h-[200px] max-w-[600px] w-full">
-                <LetterHeadBgInput setFile={setLhBg} file={lhBg} />
-              </div>
-            </div>
-          </div>
-
-          <div className={`col-span-2 ${stepId === 3 ? "block" : "hidden"}`}>
-            <h1>Footer Information</h1>
-            <FooterSocialInput
-              register={register}
-              setValue={setValue}
-              watch={watch}
-              errors={errors}
-            />
-          </div>
-          <Button
-            type="submit"
-            className="flex justify-center items-center gap-2 max-w-[180px] w-full h-[48px] shadow-none hover:shadow-none rounded-sm bg-primary"
-          >
-            {saveIsLoading && (
-              <SpinnerCircularFixed
-                size={30}
-                thickness={150}
-                speed={450}
-                color="white"
-                secondaryColor="gray"
-              />
-            )}
-            {stepId === 3 ? "Generate" : "Next"}
-          </Button>
-        </form>
-      </div>
+      <TemplateFormContainer
+        register={register}
+        handleSubmit={handleSubmit}
+        handleGenerate={handleGenerate}
+        setValue={setValue}
+        watch={watch}
+        control={control}
+        errors={errors}
+        saveIsLoading={saveIsLoading}
+        stepId={stepId}
+        setStepId={setStepId}
+        logo={logo}
+        setLogo={setLogo}
+        setBanner={setBanner}
+        banner={banner}
+        setLhBg={setLhBg}
+        lhBg={lhBg}
+        setSignature={null}
+        signature={null}
+        company_vision={true}
+      />
     </>
   );
 };

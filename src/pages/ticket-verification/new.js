@@ -3,7 +3,7 @@ import React from "react";
 
 const NewVerification = () => {
   return (
-    <div>
+    <div className="bg-gradient-to-br from-[#5bc6fc] to-BPM">
       <TicketForm navigate={true} />
     </div>
   );

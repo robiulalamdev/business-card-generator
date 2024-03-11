@@ -33,7 +33,7 @@ const Banner = () => {
     //     </div>
     //   </div>
     // </>
-    <div className="bg-[#475DF1]">
+    <div className="bg-BPM">
       <div className="container w-full min-h-[400px] grid md:grid-cols-2 gap-8 items-center pb-4 md:pb-0">
         <Image
           className="max-w-[500px] object-contain w-full h-full"
@@ -49,12 +49,14 @@ const Banner = () => {
             that fit any need.
           </p>
 
-          <Button
-            className="rounded shadow-none hover:shadow-none h-12 mt-8 text-white bg-gradient-to-r from-yellow-700 to-pink-500
+          <Link href="/ticket-verification/new">
+            <Button
+              className="rounded shadow-none hover:shadow-none h-12 mt-8 text-white bg-gradient-to-r from-yellow-700 to-pink-500
           hover:bg-gradient-to-r hover:from-pink-500 hover:to-yellow-700 transition-all ease-in duration-500"
-          >
-            Create your own business card
-          </Button>
+            >
+              Create your own business card
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

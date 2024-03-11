@@ -14,7 +14,7 @@ import {
 } from "@/redux/features/template/templateApi";
 import { Button, Dialog } from "@material-tailwind/react";
 import html2canvas from "html2canvas";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import QRCode from "react-qr-code";
 import { useDispatch, useSelector } from "react-redux";
 import { ScaleLoader } from "react-spinners";
@@ -26,8 +26,11 @@ import TemplateSidebar from "./TemplateSidebar";
 import LetterHead from "../template_preview/LetterHead";
 import TemplateReview from "../template_preview/TemplateReview";
 import BannerReview from "../template_preview/BannerReview";
+import { AuthContext } from "../context/AuthContext";
+import Link from "next/link";
 
 const TemplateMain = () => {
+  const { user, logout } = useContext(AuthContext);
   const [sendSourceCode, { isLoading: sourceLoading }] =
     useSendSourceCodeMutation();
   const [updateTempById, { isLoading: updateLoading }] =
@@ -104,118 +107,133 @@ const TemplateMain = () => {
           <ScaleLoader color="#4A51D3" />
         </div>
       ) : (
-        <div className="flex justify-between w-full bg-purple-50/65">
+        <div className="flex justify-between w-full bg-gradient-to-br from-[#5bc6fc] to-BPM">
           {generateStep === 2 && <TemplateSidebar />}
 
-          <div className="w-full flex-grow h-screen overflow-y-auto">
-            <div className="bg-white my-4 w-fit mx-auto">
-              {selectedTmp && generateStep === 1 && (
-                <>{selectedTmp?.tmp_form}</>
+          <div className="w-full flex-grow h-screen flex flex-col justify-between max-w-[1400px] mx-auto">
+            <div className="flex justify-end h-[80px] items-center w-full">
+              {user && user?._id && (
+                <Link href="/dashboard">
+                  <button
+                    className={`w-[200px] h-10 flex items-center justify-center px-2  rounded bg-gray-50 hover:bg-gray-200`}
+                  >
+                    <span className="text-primary text-[12px] leading-[22px font-semibold font-open-sans">
+                      Dashboard
+                    </span>
+                  </button>
+                </Link>
               )}
             </div>
-            {selectedTmp && generateStep === 2 && (
-              <div className="flex flex-col justify-center items-center h-screen">
-                {templateTab === 0 && <TemplateReview />}
-                {templateTab === 1 && <BannerReview />}
+            <div className="overflow-y-auto w-full h-full flex-grow">
+              {selectedTmp && generateStep === 1 && (
+                <div className="flex justify-center items-center w-full h-full">
+                  <>{selectedTmp?.tmp_form}</>
+                </div>
+              )}
+              {selectedTmp && generateStep === 2 && (
+                <div className="flex flex-col justify-center items-center h-screen">
+                  {templateTab === 0 && <TemplateReview />}
+                  {templateTab === 1 && <BannerReview />}
 
-                {templateTab === 2 && <LetterHead data={tempResult} />}
+                  {templateTab === 2 && <LetterHead data={tempResult} />}
 
-                {templateTab === 3 && (
-                  <>
-                    <div className="opacity-0 absolute z-10">
-                      <iframe
-                        id="print"
-                        style={{
-                          height: "400px",
-                          width: "600px",
-                          margin: "0 auto",
-                        }}
-                        srcDoc={html}
-                      ></iframe>
-                    </div>
-                    <div className="bg-white p-5 w-full max-w-[800px] rounded z-50">
-                      <h1 className="text-left font-bold mb-2 text-black">
-                        Choose Digital Card
-                      </h1>
-                      <div className="w-full h-fit grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        {dcards.map((dCard, index) => (
-                          <div
-                            onClick={() => handleChooseDcard(dCard?._id)}
-                            key={index}
-                            className={`flex items-center justify-center  h-[150px] cursor-pointer ${
-                              tempResult?.dcard_id === dCard?._id
-                                ? "border-2 border-blue-600 shadow-md shadow-gray-500"
-                                : "border-2 hover:border-2 hover:border-blue-600 hover:shadow-md shadow-gray-500 duration-150"
-                            }`}
-                          >
-                            <Image
-                              src={dCard?.thumbnail}
-                              className="w-full object-contain h-full"
-                              alt=""
+                  {templateTab === 3 && (
+                    <>
+                      <div className="opacity-0 absolute z-10">
+                        <iframe
+                          id="print"
+                          style={{
+                            height: "400px",
+                            width: "600px",
+                            margin: "0 auto",
+                          }}
+                          srcDoc={html}
+                        ></iframe>
+                      </div>
+                      <div className="bg-white p-5 w-full max-w-[800px] rounded z-50">
+                        <h1 className="text-left font-bold mb-2 text-black">
+                          Choose Digital Card
+                        </h1>
+                        <div className="w-full h-fit grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                          {dcards.map((dCard, index) => (
+                            <div
+                              onClick={() => handleChooseDcard(dCard?._id)}
+                              key={index}
+                              className={`flex items-center justify-center  h-[150px] cursor-pointer ${
+                                tempResult?.dcard_id === dCard?._id
+                                  ? "border-2 border-blue-600 shadow-md shadow-gray-500"
+                                  : "border-2 hover:border-2 hover:border-blue-600 hover:shadow-md shadow-gray-500 duration-150"
+                              }`}
+                            >
+                              <Image
+                                src={dCard?.thumbnail}
+                                className="w-full object-contain h-full"
+                                alt=""
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="flex flex-col items-center gap-4 mt-8">
+                          <div id="qrCode" className="p-1">
+                            <QRCode
+                              value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
+                              style={{ height: "150px", width: "150px" }}
                             />
                           </div>
-                        ))}
-                      </div>
-                      <div className="flex flex-col items-center gap-4 mt-8">
-                        <div id="qrCode" className="p-1">
-                          <QRCode
-                            value={`${CLIENT_URL}/temps/${tempResult?.template_link}`}
-                            style={{ height: "150px", width: "150px" }}
-                          />
-                        </div>
-                        <Button
-                          onClick={() => downloadQRCode()}
-                          size="sm"
-                          className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
-                        >
-                          Download
-                        </Button>
-                      </div>
-
-                      <div className="mt-8">
-                        {tempResult?.template_link && (
-                          <div className="flex justify-center items-center gap-4 mt-4">
-                            <div className="text-xs min-h-[40px] w-fit max-w-[800px] bg-black text-gray-300 px-2 flex items-center rounded">
-                              {`${CLIENT_URL}/temps/${tempResult?.template_link}`}
-                            </div>
-                            <Button
-                              onClick={() =>
-                                copyToClipboard(
-                                  `${CLIENT_URL}/temps/${tempResult?.template_link}`
-                                )
-                              }
-                              className="bg-primary h-10 w-14 flex justify-center items-center shadow-none hover:shadow-none text-white text-xs rounded"
-                            >
-                              <small>Copy</small>
-                            </Button>
-                          </div>
-                        )}
-
-                        <div className="flex justify-center items-center gap-4 mt-4">
                           <Button
-                            onClick={() => handleSourceCode()}
+                            onClick={() => downloadQRCode()}
                             size="sm"
-                            className="rounded-sm shadow-none hover:shadow-none h-8 text-white bg-blue-600 flex justify-center items-center gap-3"
+                            className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
+                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
                           >
-                            {sourceLoading && (
-                              <SpinnerCircularFixed
-                                size={22}
-                                thickness={150}
-                                speed={450}
-                                color="white"
-                                secondaryColor="gray"
-                              />
-                            )}
-                            Get Source Code
+                            Download
                           </Button>
                         </div>
+
+                        <div className="mt-8">
+                          {tempResult?.template_link && (
+                            <div className="flex justify-center items-center gap-4 mt-4">
+                              <div className="text-xs min-h-[40px] w-fit max-w-[800px] bg-black text-gray-300 px-2 flex items-center rounded">
+                                {`${CLIENT_URL}/temps/${tempResult?.template_link}`}
+                              </div>
+                              <Button
+                                onClick={() =>
+                                  copyToClipboard(
+                                    `${CLIENT_URL}/temps/${tempResult?.template_link}`
+                                  )
+                                }
+                                className="bg-primary h-10 w-14 flex justify-center items-center shadow-none hover:shadow-none text-white text-xs rounded"
+                              >
+                                <small>Copy</small>
+                              </Button>
+                            </div>
+                          )}
+
+                          <div className="flex justify-center items-center gap-4 mt-4">
+                            <Button
+                              onClick={() => handleSourceCode()}
+                              size="sm"
+                              className="rounded-sm shadow-none hover:shadow-none h-8 text-white bg-blue-600 flex justify-center items-center gap-3"
+                            >
+                              {sourceLoading && (
+                                <SpinnerCircularFixed
+                                  size={22}
+                                  thickness={150}
+                                  speed={450}
+                                  color="white"
+                                  secondaryColor="gray"
+                                />
+                              )}
+                              Get Source Code
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

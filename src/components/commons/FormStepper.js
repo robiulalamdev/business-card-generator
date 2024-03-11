@@ -38,8 +38,8 @@ const FormStepper = ({ stepId, setStepId }) => {
               onClick={() => handleStep(tab.id)}
               className={`w-[100px] text-xs normal-case font-normal p-0 h-[30px] rounded-full shadow-none hover:shadow-none ml-2 ${
                 stepId >= tab.id
-                  ? "bg-blue-600"
-                  : "bg-transparent border text-black cursor-none"
+                  ? "bg-BPM"
+                  : "bg-white border text-black cursor-none"
               } `}
             >
               {tab.name}

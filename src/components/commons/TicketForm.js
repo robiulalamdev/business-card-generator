@@ -45,9 +45,9 @@ const TicketForm = ({ navigate = false }) => {
     }
   };
   return (
-    <div className="h-screen w-full bg-white flex justify-center items-center">
+    <div className="h-screen w-full bg-gradient-to-br from-[#5bc6fc] to-BPM flex justify-center items-center">
       <div className="w-full">
-        <h1 className="text-center py-4 font-bold text-xl text-black">
+        <h1 className="text-center py-4 font-bold text-xl text-white font-open-sans">
           Ticket Verification
         </h1>
         <form
@@ -55,26 +55,26 @@ const TicketForm = ({ navigate = false }) => {
           className="max-w-[400px] w-full mx-auto bg-white h-fit px-3 py-5 rounded-md shadow border"
         >
           <div className="mb-4">
-            <span className="block tracking-[0.26px] leading-[16px] text-black text-sm mb-1">
+            <span className="block tracking-[0.26px] leading-[16px] text-black text-sm font-semibold font-open-sans mb-1">
               Email
             </span>
             <input
               {...register("email", { required: true })}
               type="email"
-              className="w-full h-10 bg-gray-100 outline-none px-2 rounded text-sm"
+              className="w-full h-10 bg-gray-100 border border-gray-300 outline-none px-2 rounded text-sm "
               placeholder="Enter Email"
               required
             />
           </div>
 
           <div className="mb-4">
-            <span className="block tracking-[0.26px] leading-[16px] text-black text-sm mb-1">
+            <span className="block tracking-[0.26px] leading-[16px] text-black text-sm font-semibold font-open-sans mb-1">
               Code
             </span>
             <input
               {...register("code", { required: true })}
               type="number"
-              className="w-full h-10 bg-gray-100 outline-none px-2 rounded text-sm"
+              className="w-full h-10 bg-gray-100 border border-gray-300 outline-none px-2 rounded text-sm "
               placeholder="Enter Code"
               required
             />
@@ -88,10 +88,10 @@ const TicketForm = ({ navigate = false }) => {
               </h1>
             </div>
           )}
-          <div className="mt-5 col-span-4">
+          <div className="mt-5">
             <Button
               type="submit"
-              className="flex justify-center items-center gap-2 max-w-[180px] w-full h-10 shadow-none hover:shadow-none rounded bg-primary"
+              className="flex justify-center items-center gap-2 max-w-[120px] w-full h-10 shadow-none hover:shadow-none rounded bg-primary"
             >
               {isLoading && (
                 <SpinnerCircularFixed

@@ -24,9 +24,9 @@ const ConfidentialInput = ({ register, watch, setValue }) => {
     }
   }, [value]);
   return (
-    <div className="col-span-2">
+    <div className="col-span-2 h-fit duration-1000">
       <label
-        className="text-xs sm:text-sm font-semibold uppercase leading-[26px] block"
+        className="text-xs sm:text-[12px] font-semibold text-black font-open-sans mb-1 block"
         htmlFor=""
       >
         Confidential
@@ -48,7 +48,13 @@ const ConfidentialInput = ({ register, watch, setValue }) => {
             >
               {value === item ? iTick : iCheck}
             </div>
-            <p className="flex-grow text-xs p-1">{item}</p>
+            <p
+              className={`flex-grow text-[12px] pr-[6px] py-[8px] font-open-sans  ${
+                value === item ? "text-[#fff]" : "text-gray-600"
+              }`}
+            >
+              {item}
+            </p>
           </div>
         ))}
         <div
@@ -62,17 +68,21 @@ const ConfidentialInput = ({ register, watch, setValue }) => {
           >
             {open ? iTick : iCheck}
           </div>
-          <p className="flex-grow text-xs p-1">Custom</p>
+          <p
+            className={`flex-grow text-[12px] pr-[6px] py-[8px] font-open-sans  ${
+              open ? "text-[#fff]" : "text-gray-600"
+            }`}
+          >
+            Custom
+          </p>
         </div>
       </div>
-      <div className="mt-2">
+      <div className={`mt-2 ${open ? "block" : "hidden"}`}>
         <textarea
           {...register("confidential", { required: true })}
           required
           placeholder="Enter Confidential"
-          className={`w-full h-[150px] outline-none border border-black p-2 rounded text-sm ${
-            open ? "block" : "hidden"
-          }`}
+          className={`w-full h-[110px] bg-gray-50 focus:bg-BPM/5 outline-none border border-gray-500 focus:border-primary p-[6px] rounded text-[12px] font-open-sans placeholder:font-open-sans placeholder:text-[12px] text-black placeholder:text-gray-600 resize-none`}
         ></textarea>
       </div>
     </div>

@@ -53,14 +53,15 @@ const DashboardHome = () => {
   }
   return (
     <>
-      <main className="h-full bg-teal-50/50 w-full overflow-y-auto">
+      <main className="h-full bg-gradient-to-br from-[#5bc6fc] to-BPM w-full overflow-y-auto font-open-sans">
         {!isLoading && user?._id ? (
           <div className="container pb-4">
             <div className="py-3 flex items-center gap-4">
               <input
                 onChange={(e) => searchTicket(e.target.value)}
                 type="search"
-                className="w-full max-w-[400px] h-10 outline-none border border-blue-gray-600 rounded bg-blue-gray-100 px-2 text-sm text-black placeholder:text-blue-gray-600 placeholder:text-sm"
+                className="w-full max-w-[400px] h-10 outline-none border border-gray-400 rounded bg-gray-50 px-2 text-sm 
+                text-black placeholder:text-blue-gray-800 placeholder:text-sm"
                 placeholder="Search Tickets"
               />
               <button

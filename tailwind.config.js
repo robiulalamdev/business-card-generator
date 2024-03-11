@@ -12,7 +12,9 @@ module.exports = withMT({
   theme: {
     extend: {
       colors: {
-        primary: "#4A51D3",
+        primary: "#475DF1",
+        pd: "#1e34c9",
+        BPM: "#475DF1",
       },
       container: {
         center: true,
