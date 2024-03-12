@@ -11,6 +11,7 @@ import { useReactToPrint } from "react-to-print";
 import TemplateCard from "../templates/TemplateCard";
 import { templates } from "@/lib/datas/templates";
 import Image from "next/image";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
 const TemplateReview = ({}) => {
   const { selectedTmp, openChooseTempModal, openTempForm } = useSelector(
@@ -31,20 +32,34 @@ const TemplateReview = ({}) => {
     dispatch(setOpenTempForm(true));
   };
 
-  console.log(selectedTmp);
   return (
     <>
-      <div className="flex flex-col items-end gap-4">
-        <div ref={componentRef} className="bg-white">
-          {selectedTmp?.template}
-        </div>
-        <div className="flex items-center gap-2">
+      <div
+        className="flex flex-col items-center justify-between gap-4 bg-white max-w-[800px] h-fit w-full py-[12px] px-[8px]
+        border rounded-md
+      
+      "
+        style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
+      >
+        <TransformWrapper initialScale={1} initialPositionX={200}>
+          <TransformComponent
+            wrapperStyle={{
+              width: "100%",
+              height: "350px",
+            }}
+          >
+            <div ref={componentRef} className="w-full h-full">
+              {selectedTmp?.template}
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
+        <div className="flex items-center gap-2 font-open-sans normal-case mb-[80px]">
           <Button
             onClick={() => {
               dispatch(setOpenChooseTempModal(true));
             }}
             size="sm"
-            className="rounded-sm shadow-none hover:shadow-none h-8 bg-deep-purple-600 text-xs text-current text-white"
+            className="normal-case font-open-sans font-normal rounded-sm shadow-none hover:shadow-none h-8 bg-deep-purple-600 text-xs text-current text-white"
           >
             Change Template
           </Button>
@@ -54,14 +69,14 @@ const TemplateReview = ({}) => {
               dispatch(setOpenTempForm(true));
             }}
             size="sm"
-            className="rounded-sm shadow-none hover:shadow-none h-8 bg-white text-xs text-current text-blue-gray-800"
+            className="normal-case font-open-sans font-normal rounded-sm shadow-none hover:shadow-none h-8 bg-gray-50 text-xs text-current text-blue-gray-800 border"
           >
             Update
           </Button>
           <Button
             onClick={() => handlePrint()}
             size="sm"
-            className="rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
+            className="normal-case font-open-sans font-normal rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
                   hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
           >
             Download

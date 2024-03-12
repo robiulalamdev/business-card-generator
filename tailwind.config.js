@@ -26,6 +26,7 @@ module.exports = withMT({
       fontFamily: {
         inter: ["Inter", "serif"],
         "open-sans": ["Open Sans", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"],
       },
     },
   },
