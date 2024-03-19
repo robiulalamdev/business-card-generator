@@ -2,7 +2,7 @@ import useInputPattern from "@/lib/hooks/useInputPattern";
 import React from "react";
 
 const FooterSocialInput = ({ register, setValue, watch, errors }) => {
-  const { handleNumber } = useInputPattern();
+  const { handlePhoneNumberInput } = useInputPattern();
   return (
     <div className="grid grid-cols-2 gap-[6px]">
       <div className="">
@@ -15,9 +15,9 @@ const FooterSocialInput = ({ register, setValue, watch, errors }) => {
         <input
           {...register("footer.contact_no", { required: false })}
           type="text"
-          onInput={handleNumber}
+          onInput={handlePhoneNumberInput}
           required={false}
-          placeholder="Enter Contact No"
+          placeholder="+1-XXX-XXX-XXXX"
           className="w-full h-[37px] bg-gray-50 focus:bg-BPM/5 outline-none border border-gray-500 focus:border-primary px-[6px] rounded text-[12px] font-open-sans placeholder:font-open-sans placeholder:text-[12px] text-black placeholder:text-gray-600"
         />
       </div>

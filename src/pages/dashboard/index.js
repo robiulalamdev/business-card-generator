@@ -66,7 +66,7 @@ const DashboardHome = () => {
               />
               <button
                 onClick={() => setOpen(true)}
-                className="shadow-none hover:shadow-none rounded bg-orange-700 text-current w-[100px] h-10 text-white text-sm p-0"
+                className="shadow-none hover:shadow-none rounded bg-orange-700 text-current min-w-[90px] h-10 text-white text-sm p-0"
               >
                 New Ticket
               </button>

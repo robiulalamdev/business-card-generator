@@ -73,7 +73,7 @@ const CreateTicketPopup = ({ open, close }) => {
             </small>
           )}
         </div>
-        <div className="grid grid-cols-3 items-end gap-4">
+        <div className="grid md:grid-cols-3 items-end gap-4">
           <div className="col-span-2">
             <span className="block tracking-[0.26px] leading-[16px] text-black text-sm mb-1">
               Code
@@ -90,7 +90,7 @@ const CreateTicketPopup = ({ open, close }) => {
           <Button
             onClick={() => handleGenerateCode()}
             type="button"
-            className="h-10 w-full bg-blue-600  text-current text-white rounded hover:shadow-none shadow-none"
+            className="h-10 w-full bg-blue-600  text-current text-white rounded hover:shadow-none shadow-none max-w-fit"
           >
             Generate
           </Button>

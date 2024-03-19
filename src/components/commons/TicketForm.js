@@ -34,7 +34,7 @@ const TicketForm = ({ navigate = false }) => {
         localStorage.setItem(TICKET_TOKEN_NAME, result?.data?.token);
         dispatch(setTicket(result?.data?.data));
         if (navigate) {
-          router.replace("/templates/ticket-verification");
+          router.replace("/ticket-verification");
         }
       } else {
         setErrorResult("Ticket Credentials Not Valid");
@@ -45,7 +45,7 @@ const TicketForm = ({ navigate = false }) => {
     }
   };
   return (
-    <div className="h-screen w-full bg-gradient-to-br from-[#5bc6fc] to-BPM flex justify-center items-center">
+    <div className="h-screen w-full bg-gradient-to-br from-[#5bc6fc] to-BPM flex justify-center items-center px-4">
       <div className="w-full">
         <h1 className="text-center py-4 font-bold text-xl text-white font-open-sans">
           Ticket Verification
