@@ -31,7 +31,7 @@ const LetterHead = ({ data }) => {
   });
 
   return (
-    <div className="grid grid-cols-2 gap-8 w-full h-full p-4">
+    <div className="grid xl:grid-cols-2 gap-8 w-full md:p-4 h-[800px]">
       <div
         ref={componentRef1}
         className="w-full h-full bg-white py-16"
@@ -43,7 +43,7 @@ const LetterHead = ({ data }) => {
         }}
       >
         <div className={`h-full w-full`}>
-          <div className="flex justify-between items-start max-w-[600px] mx-auto">
+          <div className="flex justify-between items-start max-w-[600px] mx-auto px-3">
             <img
               src={data?.template?.logo}
               alt=""
@@ -99,7 +99,7 @@ const LetterHead = ({ data }) => {
         }}
       >
         <div className={`h-full w-full`}>
-          <div className="flex justify-between items-start max-w-[600px] mx-auto">
+          <div className="flex justify-between items-start max-w-[600px] mx-auto px-3">
             <img
               src={data?.template?.logo}
               alt=""

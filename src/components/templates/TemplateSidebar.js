@@ -12,7 +12,7 @@ const TemplateSidebar = () => {
   const { templateTab } = useSelector((state) => state.global);
   const dispatch = useDispatch();
   return (
-    <div className="bg-white max-w-[300px] min-w-[240px] md:flex flex-col justify-between items-center w-full h-screen pb-8 shadow border-r border-primary hidden md:inline-block">
+    <div className="bg-white max-w-[300px] min-w-[240px] flex flex-col justify-between items-center w-full h-screen pb-8 shadow border-r border-primary">
       <div className="w-full mt-[20px]">
         <Image
           src={logo}

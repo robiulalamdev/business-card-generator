@@ -12,7 +12,7 @@ import {
   useSendSourceCodeMutation,
   useUpdateTempByIdMutation,
 } from "@/redux/features/template/templateApi";
-import { Button, Dialog } from "@material-tailwind/react";
+import { Button, Dialog, Drawer } from "@material-tailwind/react";
 import html2canvas from "html2canvas";
 import React, { useContext, useState } from "react";
 import QRCode from "react-qr-code";
@@ -28,6 +28,7 @@ import TemplateReview from "../template_preview/TemplateReview";
 import BannerReview from "../template_preview/BannerReview";
 import { AuthContext } from "../context/AuthContext";
 import Link from "next/link";
+import { iClose, iMenu } from "@/lib/icons/icons";
 
 const TemplateMain = () => {
   const { user, logout } = useContext(AuthContext);
@@ -39,6 +40,7 @@ const TemplateMain = () => {
     useSelector((state) => state.global);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const dispatch = useDispatch();
 
   const copyToClipboard = (text) => {
@@ -108,14 +110,42 @@ const TemplateMain = () => {
         </div>
       ) : (
         <div className="flex justify-between w-full bg-gradient-to-br from-[#5bc6fc] to-BPM">
-          {generateStep === 2 && <TemplateSidebar />}
+          {generateStep === 2 && (
+            <>
+              <div className="hidden lg:block">
+                <TemplateSidebar />
+              </div>
+              <Drawer
+                open={openDrawer}
+                onClose={() => setOpenDrawer(false)}
+                className="bg-white"
+              >
+                <div className="relative">
+                  <div
+                    onClick={() => setOpenDrawer(!openDrawer)}
+                    className="text-primary p-1 hover:bg-primary/10 rounded cursor-pointer w-fit absolute top-2 right-2"
+                  >
+                    {iClose}
+                  </div>
+                  <TemplateSidebar />
+                </div>
+              </Drawer>
+            </>
+          )}
 
-          <div className="w-full flex-grow h-screen flex flex-col justify-between max-w-[1400px] mx-auto">
-            <div className="flex justify-end h-[80px] items-center w-full">
+          <div className="w-full flex-grow h-screen flex flex-col justify-between max-w-[1400px] mx-auto px-[8px]">
+            <div className="flex justify-between h-[80px] items-center w-full">
+              <div
+                onClick={() => setOpenDrawer(!openDrawer)}
+                className="lg:hidden text-white p-1 hover:bg-black rounded cursor-pointer"
+              >
+                {iMenu}
+              </div>
+              <div className="hidden lg:block"></div>
               {user && user?._id && (
                 <Link href="/dashboard">
                   <button
-                    className={`w-[200px] h-10 flex items-center justify-center px-2  rounded bg-gray-50 hover:bg-gray-200`}
+                    className={`w-[120px] md:w-[200px] h-8 md:h-9 flex items-center justify-center px-2  rounded bg-gray-50 hover:bg-gray-200`}
                   >
                     <span className="text-primary text-[12px] leading-[22px font-semibold font-open-sans">
                       Dashboard
@@ -139,7 +169,7 @@ const TemplateMain = () => {
 
                   {templateTab === 3 && (
                     <>
-                      <div className="opacity-0 absolute z-10">
+                      {/* <div className="opacity-0 absolute z-10">
                         <iframe
                           id="print"
                           style={{
@@ -149,8 +179,8 @@ const TemplateMain = () => {
                           }}
                           srcDoc={html}
                         ></iframe>
-                      </div>
-                      <div className="bg-white p-5 w-full max-w-[800px] rounded z-50">
+                      </div> */}
+                      <div className="bg-white p-5 w-full max-w-[800px] rounded z-50 mt-[200px] md:mt-0">
                         <h1 className="text-left font-bold mb-2 text-black">
                           Choose Digital Card
                         </h1>
