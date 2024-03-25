@@ -12,6 +12,7 @@ import TemplateCard from "../templates/TemplateCard";
 import { templates } from "@/lib/datas/templates";
 import Image from "next/image";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import { iClose } from "@/lib/icons/icons";
 
 const TemplateReview = ({}) => {
   const { selectedTmp, openChooseTempModal, openTempForm } = useSelector(
@@ -48,7 +49,10 @@ const TemplateReview = ({}) => {
               height: "350px",
             }}
           >
-            <div ref={componentRef} className="w-full h-full">
+            <div
+              ref={componentRef}
+              className="w-full h-full min-w-[400px] bg-white"
+            >
               {selectedTmp?.template}
             </div>
           </TransformComponent>
@@ -59,7 +63,7 @@ const TemplateReview = ({}) => {
               dispatch(setOpenChooseTempModal(true));
             }}
             size="sm"
-            className="normal-case font-open-sans font-normal rounded-sm shadow-none hover:shadow-none h-8 bg-deep-purple-600 text-xs text-current text-white"
+            className="normal-case font-open-sans font-normal rounded-sm shadow-none hover:shadow-none h-8 bg-deep-purple-600 text-[10px] md:text-xs text-current text-white"
           >
             Change Template
           </Button>
@@ -69,7 +73,7 @@ const TemplateReview = ({}) => {
               dispatch(setOpenTempForm(true));
             }}
             size="sm"
-            className="normal-case font-open-sans font-normal rounded-sm shadow-none hover:shadow-none h-8 bg-gray-50 text-xs text-current text-blue-gray-800 border"
+            className="normal-case font-open-sans font-normal rounded-sm shadow-none hover:shadow-none h-8 bg-gray-50 text-[10px] md:text-xs text-current text-blue-gray-800 border"
           >
             Update
           </Button>
@@ -77,7 +81,7 @@ const TemplateReview = ({}) => {
             onClick={() => handlePrint()}
             size="sm"
             className="normal-case font-open-sans font-normal rounded-sm shadow-none hover:shadow-none h-8 bg-gradient-to-r from-blue-700 to-primary
-                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-xs text-current text-white"
+                  hover:bg-gradient-to-r hover:from-primary hover:to-blue-700 transition-all ease-in duration-500 text-[10px] md:text-xs text-current text-white"
           >
             Download
           </Button>
@@ -91,56 +95,69 @@ const TemplateReview = ({}) => {
           dispatch(setOpenTempForm(false));
         }}
         size="xl"
-        className="h-full p-4 overflow-y-auto max-h-full"
+        className="h-full w-full p-0 max-h-full"
       >
-        {openChooseTempModal && !openTempForm && (
-          <>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 mt-4">
-              {templates.map((tmp, index) => (
-                <div
-                  key={index}
-                  className={`w-full h-full cursor-pointer hover:border hover:border-primary bg-white overflow-hidden group relative ${
-                    selectedTmp?._id === tmp?._id &&
-                    "border-[4px] border-primary"
-                  }`}
-                  style={{
-                    boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
-                  }}
-                >
-                  <Image
-                    className="w-full border h-full object-contain hover:scale-150 duration-700"
-                    src={tmp.img}
-                    alt=""
-                  />
-                  <div
-                    className="absolute top-0 w-full h-full hidden group-hover:inline-block bg-primary/10 backdrop-blur-[4px] group-hover:duration-200
-                        group-hover:flex justify-center items-center gap-3
-                        "
-                  >
-                    <Button
-                      onClick={() => setPreview(tmp?.img)}
-                      className="w-[100px] h-8 rounded-sm bg-primary p-0"
+        <div className="relative w-full max-h-full">
+          <div className="mt-8 pb-20 w-full h-full max-h-screen overflow-y-auto p-4">
+            {openChooseTempModal && !openTempForm && (
+              <>
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
+                  {templates.map((tmp, index) => (
+                    <div
+                      key={index}
+                      className={`w-full h-full cursor-pointer hover:border hover:border-primary bg-white overflow-hidden group relative ${
+                        selectedTmp?._id === tmp?._id &&
+                        "border-[4px] border-primary"
+                      }`}
+                      style={{
+                        boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+                      }}
                     >
-                      Preview
-                    </Button>
-                    <Button
-                      onClick={() => handleGetData(tmp)}
-                      className="w-[100px] h-8 rounded-sm bg-green-600 p-0"
-                    >
-                      Select
-                    </Button>
-                  </div>
+                      <Image
+                        className="w-full border h-full object-contain hover:scale-150 duration-700"
+                        src={tmp.img}
+                        alt=""
+                      />
+                      <div
+                        className="absolute top-0 w-full h-full hidden group-hover:inline-block bg-primary/10 backdrop-blur-[4px] group-hover:duration-200
+                        group-hover:flex justify-center items-center gap-3"
+                      >
+                        <Button
+                          onClick={() => setPreview(tmp?.img)}
+                          className="w-[100px] h-8 rounded-sm bg-primary p-0"
+                        >
+                          Preview
+                        </Button>
+                        <Button
+                          onClick={() => handleGetData(tmp)}
+                          className="w-[100px] h-8 rounded-sm bg-green-600 p-0"
+                        >
+                          Select
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </>
-        )}
+              </>
+            )}
 
-        {openChooseTempModal && openTempForm && (
-          <div className="my-4 w-full mx-auto">
-            {selectedTmp && <>{selectedTmp?.tmp_form}</>}
+            {openChooseTempModal && openTempForm && (
+              <div className="my-8 w-full mx-auto">
+                {selectedTmp && <>{selectedTmp?.tmp_form}</>}
+              </div>
+            )}
           </div>
-        )}
+
+          <div
+            onClick={() => {
+              dispatch(setOpenChooseTempModal(false));
+              dispatch(setOpenTempForm(false));
+            }}
+            className="text-primary p-1 hover:bg-primary/10 rounded cursor-pointer w-fit absolute -top-8 -right-0 bg-primary/15 hover:bg-primary hover:text-white"
+          >
+            {iClose}
+          </div>
+        </div>
       </Dialog>
 
       <Dialog open={!!preview} handler={() => setPreview("")} size="xl">

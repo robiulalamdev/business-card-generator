@@ -154,9 +154,9 @@ const TemplateMain = () => {
                 </Link>
               )}
             </div>
-            <div className="overflow-y-auto w-full h-full flex-grow">
+            <div className="overflow-y-auto w-full h-full flex-grow max-h-full">
               {selectedTmp && generateStep === 1 && (
-                <div className="flex justify-center items-center w-full h-full">
+                <div className="flex justify-center items-center w-full h-full mt-[350px] md:mt-0">
                   <>{selectedTmp?.tmp_form}</>
                 </div>
               )}
@@ -169,17 +169,6 @@ const TemplateMain = () => {
 
                   {templateTab === 3 && (
                     <>
-                      {/* <div className="opacity-0 absolute z-10">
-                        <iframe
-                          id="print"
-                          style={{
-                            height: "400px",
-                            width: "600px",
-                            margin: "0 auto",
-                          }}
-                          srcDoc={html}
-                        ></iframe>
-                      </div> */}
                       <div className="bg-white p-5 w-full max-w-[800px] rounded z-50 mt-[200px] md:mt-0">
                         <h1 className="text-left font-bold mb-2 text-black">
                           Choose Digital Card

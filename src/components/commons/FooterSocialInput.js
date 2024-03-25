@@ -4,7 +4,7 @@ import React from "react";
 const FooterSocialInput = ({ register, setValue, watch, errors }) => {
   const { handlePhoneNumberInput } = useInputPattern();
   return (
-    <div className="grid grid-cols-2 gap-[6px]">
+    <div className="grid sm:grid-cols-2 gap-[6px]">
       <div className="">
         <label
           className="text-xs sm:text-[12px] font-semibold text-black font-open-sans mb-1 block"

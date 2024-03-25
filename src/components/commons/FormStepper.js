@@ -15,7 +15,7 @@ const FormStepper = ({ stepId, setStepId }) => {
   };
   return (
     <>
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-1 md:gap-2">
         {tabs.map((tab, index) => (
           <div key={index} className="flex items-center">
             {index > 0 && (
@@ -36,7 +36,7 @@ const FormStepper = ({ stepId, setStepId }) => {
             )}
             <Button
               onClick={() => handleStep(tab.id)}
-              className={`w-[100px] text-xs normal-case font-normal p-0 h-[30px] rounded-full shadow-none hover:shadow-none ml-2 ${
+              className={`w-[70px] sm:w-[100px] text-[10px] md:text-xs normal-case font-normal p-0 h-[30px] rounded-full shadow-none hover:shadow-none ml-1 md:ml-2 ${
                 stepId >= tab.id
                   ? "bg-BPM"
                   : "bg-white border text-black cursor-none"

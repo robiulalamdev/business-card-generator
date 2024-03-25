@@ -40,7 +40,7 @@ const TemplateFormContainer = ({
   return (
     <>
       <div
-        className="bg-gray-50 rounded-md py-4 px-8 max-w-[1000px] w-full mx-auto"
+        className="md:bg-gray-50 rounded-md md:py-4 md:px-8 max-w-[1000px] w-full mx-auto !shadow-none"
         style={{
           boxShadow:
             "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
@@ -49,7 +49,7 @@ const TemplateFormContainer = ({
         <FormStepper stepId={stepId} setStepId={setStepId} />
         <form
           onSubmit={handleSubmit(handleGenerate)}
-          className="h-fit mt-[15px] rounded border border-BPM p-8 shadow bg-white"
+          className="h-fit mt-[15px] rounded border border-BPM p-4 md:p-8 shadow bg-white"
         >
           <div
             className={`grid md:grid-cols-2 gap-6 ${
