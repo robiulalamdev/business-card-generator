@@ -34,7 +34,7 @@ const LetterHead = ({ data }) => {
     <div className="grid xl:grid-cols-2 gap-8 w-full md:p-4 h-[800px]">
       <div
         ref={componentRef1}
-        className="w-full h-full bg-white py-16"
+        className="w-full h-full bg-white min-h-[800px] py-16"
         style={{
           backgroundImage: `url(${data?.template?.letter_head_bg})`,
           backgroundRepeat: "no-repeat",
@@ -90,7 +90,7 @@ const LetterHead = ({ data }) => {
 
       <div
         ref={componentRef2}
-        className="w-full h-full bg-white py-16"
+        className="w-full h-full bg-white py-16 min-h-[800px]"
         style={{
           backgroundImage: `url(${data?.template?.letter_head_bg})`,
           backgroundRepeat: "no-repeat",

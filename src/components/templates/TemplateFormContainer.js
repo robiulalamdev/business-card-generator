@@ -259,7 +259,7 @@ const TemplateFormContainer = ({
               >
                 Banner (Optional)
               </label>
-              <div className="h-[200px] max-w-[600px] w-full">
+              <div className="h-[200px] max-w-[600px] w-full relative">
                 <BannerInput setFile={setBanner} file={banner} />
               </div>
             </div>
@@ -270,7 +270,7 @@ const TemplateFormContainer = ({
               >
                 Letter Head Background (Optional)
               </label>
-              <div className="h-[200px] max-w-[600px] w-full">
+              <div className="h-[200px] max-w-[600px] w-full relative">
                 <LetterHeadBgInput setFile={setLhBg} file={lhBg} />
               </div>
             </div>

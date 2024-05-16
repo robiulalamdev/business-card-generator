@@ -169,6 +169,17 @@ const TemplateMain = () => {
 
                   {templateTab === 3 && (
                     <>
+                      <div className="opacity-0 absolute z-10 min-h-[400px]">
+                        <iframe
+                          id="print"
+                          style={{
+                            height: "400px",
+                            width: "600px",
+                            margin: "0 auto",
+                          }}
+                          srcDoc={html}
+                        ></iframe>
+                      </div>
                       <div className="bg-white p-5 w-full max-w-[800px] rounded z-50 mt-[200px] md:mt-0">
                         <h1 className="text-left font-bold mb-2 text-black">
                           Choose Digital Card
