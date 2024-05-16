@@ -49,14 +49,24 @@ const Banner = () => {
             that fit any need.
           </p>
 
-          <Link href="/ticket-verification/new">
-            <Button
-              className="rounded shadow-none hover:shadow-none h-12 mt-8 text-white bg-gradient-to-r from-yellow-700 to-pink-500
+          <div className="flex items-start gap-3 flex-wrap">
+            <Link href="/ticket-verification/new">
+              <Button
+                className="rounded shadow-none hover:shadow-none h-12 mt-8 text-white bg-gradient-to-r from-yellow-700 to-pink-500
           hover:bg-gradient-to-r hover:from-pink-500 hover:to-yellow-700 transition-all ease-in duration-500"
-            >
-              Create your own business card
-            </Button>
-          </Link>
+              >
+                Create your own business card
+              </Button>
+            </Link>
+            <Link href="/dashboard">
+              <Button
+                className="rounded shadow-none hover:shadow-none h-12 mt-8 text-white bg-gradient-to-r from-yellow-700 to-pink-500
+          hover:bg-gradient-to-r hover:from-orange-500 hover:to-yellow-700 transition-all ease-in duration-500"
+              >
+                Admin Login
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
